@@ -62,6 +62,20 @@ function mainController ($scope, $http) {
         console.log('Error: ' + data)
       })
   }
+  $scope.getArticle = function () {
+    $scope.edit = false
+    console.log(title)
+    $http.get('/articles/' + $scope.id_article, $scope.formData)
+      .success(function (data) {
+        $scope.articles = data
+        $scope.detail = true
+        $scope.submit = false
+        $scope.formData = {}
+      })
+      .error(function (data) {
+        console.log('Error: ' + data)
+      })
+  }
 
   $scope.turnToEdit = function(){
       $scope.edit = true

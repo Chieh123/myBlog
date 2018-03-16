@@ -21,6 +21,7 @@
   <script src="//cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script><!-- load jquery -->
   <script src="//lib.sinaapp.com/js/angular.js/angular-1.2.19/angular.min.js"></script><!-- load angular -->
   <script src="core.js"></script>
+  <link href="styles.css" rel="stylesheet">
 </head>
 <!-- SET THE CONTROLLER AND GET ALL TODOS -->
 <body ng-controller="mainController">
@@ -31,6 +32,7 @@
       <h1 ng-if="detail && !edit">Article Content <span class="label label-info"></span></h1>
       <h1 ng-if="edit">Edit Article <span class="label label-info"></span></h1>
     </div>
+    <!--list of artucles-->
     <div>
       <table ng-if="!edit">
         <thead>
@@ -61,28 +63,37 @@
         </tbody>
       </table>
     </div>
-    <div ng-if = "edit">
-      article title: <input ng-model="formData.title">
-      content: <input ng-model="formData.content">
-      <button type="submit" class="btn btn-primary btn-lg" ng-click="editArticle()">Confirm</button></td>
-    </div>
-
-    <div class="jumbotron text-center">
-      <h2 ng-if="submit">articles <span class="label label-info">{{ articles.length }}</span></h2>
-      <button ng-if="detail" ng-click="getArticles()">Article List</button>
-    </div>
-    <!-- FORM TO CREATE TODOS -->
-    <div id="article-form" class="row" ng-if="!edit">
+    <!--edit artucle-->
+    <div id="edit-article-form" class="row" ng-if="edit">
       <div class="col-sm-8 col-sm-offset-2 text-center">
-        <form ng-if="submit">
+        <form ng-if="edit" name="editForm">
           <div class="form-group">
             <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-            <input type="text" class="form-control input-lg text-center" placeholder = 'title' ng-model="formData.title" ng-init = "formData.title = ' '" ng-required = "formData.title">
-            <input type="text" class="form-control input-lg text-center" placeholder = 'author' ng-model="formData.author" ng-init = "formData.author = 'anonymous'" required = "formData.author">
-            <input type="text" class="form-control input-lg text-center" placeholder = 'content' ng-model="formData.content" ng-init = "formData.content = ' '" >
+            article title: <input name = "article_title" type = 'text' class="form-control input-lg text-center" ng-model="formData.title" ng-required = "true"></input>
+            content: <textarea name = "article_content" class="form-control input-lg text-center" ng-model="formData.content" ng-required = "true"></textarea>
           </div>
             <!-- createToDo() WILL CREATE NEW TODOS -->
-            <button type="submit" class="btn btn-primary btn-lg" ng-click="postArticle()">Submit</button>
+            <button ng-if="editForm.article_title.$valid && editForm.article_content.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="editArticle()">Confirm</button>
+        </form>
+      </div>
+    </div>
+    <!--the router-->
+    <div class="jumbotron text-center">
+      <button ng-if="detail" ng-click="getArticles()">Article List</button>
+      <button ng-if="edit" ng-click="getArticle()">Go Back</button>
+    </div>
+    <!-- FORM TO CREATE article -->
+    <div id="article-form" class="row" ng-if="!edit">
+      <div class="col-sm-8 col-sm-offset-2 text-center">
+        <form ng-if="submit" name="postForm">
+          <div class="form-group">
+            <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+            title: <input name = "article_title" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your title' ng-model="formData.title"  ng-required = "true"></input>
+            author: <input name = "article_author" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your name' ng-model="formData.author"  ng-required = "true"></input>
+            content: <textarea class="form-control input-lg text-center" placeholder = 'please type ypur article' ng-model="formData.content" ></textarea>
+          </div>
+            <!-- createToDo() WILL CREATE NEW TODOS -->
+            <button ng-if="postForm.article_title.$valid && postForm.article_author.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="postArticle()">Submit</button>
         </form>
       </div>
     </div>
