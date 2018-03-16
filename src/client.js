@@ -32,7 +32,6 @@ app.get('/articles/:article_id', function (req, res) {
 })
 // create Todo and send back all todos after creation
 app.post('/postArticle', function (req, res) {
-  // create an article, information comes from AJAX request from Angular
   request.post({url: serverurl + '/postArticle?title=' + encodeURI(req.body.title) + '&author=' + encodeURI(req.body.author) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)

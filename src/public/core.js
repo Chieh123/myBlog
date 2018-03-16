@@ -6,8 +6,8 @@ function mainController ($scope, $http) {
   $scope.submit = true
   $scope.detail = false
   $scope.edit = false
-  $scope.content_article = "content"
-  $scope.title_article = "title"
+  $scope.content_article = 'content'
+  $scope.title_article = 'title'
   $http.get('/articles')
     .success(function (data) {
       $scope.articles = data
@@ -17,8 +17,8 @@ function mainController ($scope, $http) {
       console.log('Error: ' + data)
     })
   $scope.getArticles = function () {
-    $scope.content_article = "content"
-    $scope.title_article = "title"
+    $scope.content_article = 'content'
+    $scope.title_article = 'title'
     $http.get('/articles')
       .success(function (data) {
         $scope.submit = true
@@ -77,10 +77,10 @@ function mainController ($scope, $http) {
       })
   }
 
-  $scope.turnToEdit = function(){
-      $scope.edit = true
-      $scope.formData.title = $scope.title_article
-      $scope.formData.content = $scope.content_article
+  $scope.turnToEdit = function () {
+    $scope.edit = true
+    $scope.formData.title = $scope.title_article
+    $scope.formData.content = $scope.content_article
   }
 
   $scope.editArticle = function () {
