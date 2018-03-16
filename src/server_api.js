@@ -31,12 +31,13 @@ class apiService {
   };
   postArticle () {
     let self = this
-    console.log('self.req.query.title = ' + self.req.query.title)
-    let title = self.req.query.title === undefined ? ' ' : self.req.query.title
+    console.log('self.req.query.title = ' + decodeURI(self.req.query.title))
+    console.log('self.req.query.title = ' + decodeURI(self.req.query.author))
+    console.log('self.req.query.title = ' + decodeURI(self.req.query.content))
     Article.create({
-      Title: title,
-      Author: self.req.query.author,
-      Content: self.req.query.content
+      Title: decodeURI(self.req.query.title),
+      Author: decodeURI(self.req.query.author),
+      Content: decodeURI(self.req.query.content)
     }, function (err, todo) {
       if (err) {
         self.res.send(err)
@@ -49,8 +50,8 @@ class apiService {
     Article.update({
       _id: self.req.params.article_id
     }, {
-      Title: self.req.query.title,
-      Content: self.req.query.content,
+      Title: decodeURI(self.req.query.title),
+      Content: decodeURI(self.req.query.content),
       mDate: Date.now()
     }, function (err, todo) {
       if (err) {

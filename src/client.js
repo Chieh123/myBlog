@@ -33,7 +33,7 @@ app.get('/articles/:article_id', function (req, res) {
 // create Todo and send back all todos after creation
 app.post('/postArticle', function (req, res) {
   // create an article, information comes from AJAX request from Angular
-  request.post({url: serverurl + '/postArticle?title=' + req.body.title + '&author=' + req.body.author + '&content=' + req.body.content}, function (error, httpResponse, body) {
+  request.post({url: serverurl + '/postArticle?title=' + encodeURI(req.body.title) + '&author=' + encodeURI(req.body.author) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }
@@ -42,7 +42,7 @@ app.post('/postArticle', function (req, res) {
 })
 // update specific article
 app.put('/articles/:article_id/edit', function (req, res) {
-  request.put({url: serverurl + '/articles/' + req.params.article_id + '/edit?title=' + req.body.title + '&content=' + req.body.content}, function (error, httpResponse, body) {
+  request.put({url: serverurl + '/articles/' + req.params.article_id + '/edit?title=' + encodeURI(req.body.title) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }

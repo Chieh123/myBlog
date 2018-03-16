@@ -1,3 +1,4 @@
+
 <!-- index.html -->
 <!doctype html>
 <!-- ASSIGN OUR ANGULAR MODULE -->
@@ -70,12 +71,11 @@
         <form ng-if="submit">
           <div class="form-group">
             <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-            <input type="text" class="form-control input-lg text-center" placeholder = 'title' ng-model="formData.title"  ng-required = "formData.title">
+            <input type="text" class="form-control input-lg text-center" placeholder = 'title' ng-model="formData.title" ng-init = "formData.title = '未知'" ng-required = "formData.title">
             <input type="text" class="form-control input-lg text-center" placeholder = 'author' ng-model="formData.author" ng-init = "formData.author = 'anonymous'" required = "formData.author">
             <input type="text" class="form-control input-lg text-center" placeholder = 'content' ng-model="formData.content" ng-init = "formData.content = ' '" >
           </div>
             <!-- createToDo() WILL CREATE NEW TODOS -->
-            <button ng-if="edit" type="submit" class="btn btn-primary btn-lg" ng-click="editArticle("")">Edit</button>
             <button type="submit" class="btn btn-primary btn-lg" ng-click="postArticle()">Submit</button>
         </form>
       </div>
