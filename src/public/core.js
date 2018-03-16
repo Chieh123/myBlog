@@ -4,6 +4,10 @@ function mainController ($scope, $http) {
   $scope.formData = {}
   // when landing on the page, get all todos and show them
   $scope.submit = true
+  $scope.detail = false
+  $scope.edit = false
+  $scope.content_article = "content"
+  $scope.title_article = "title"
   $http.get('/articles')
     .success(function (data) {
       $scope.articles = data
@@ -13,9 +17,12 @@ function mainController ($scope, $http) {
       console.log('Error: ' + data)
     })
   $scope.getArticles = function () {
+    $scope.content_article = "content"
+    $scope.title_article = "title"
     $http.get('/articles')
       .success(function (data) {
         $scope.submit = true
+        $scope.detail = false
         $scope.edit = false
         $scope.formData = {}
         $scope.articles = data
@@ -39,11 +46,15 @@ function mainController ($scope, $http) {
       })
   }
   // show specific article
-  $scope.specificArticle = function (id) {
+  $scope.specificArticle = function (id, title, content) {
+    $scope.id_article = id
+    $scope.content_article = content
+    $scope.title_article = title
+    console.log(title)
     $http.get('/articles/' + id, $scope.formData)
       .success(function (data) {
         $scope.articles = data
-        $scope.edit = true
+        $scope.detail = true
         $scope.submit = false
         $scope.formData = {}
       })
@@ -52,9 +63,16 @@ function mainController ($scope, $http) {
       })
   }
 
-  $scope.editArticle = function (id) {
-    $http.put('/articles/' + id + '/edit', $scope.formData)
+  $scope.turnToEdit = function(){
+      $scope.edit = true
+      $scope.formData.title = $scope.title_article
+      $scope.formData.content = $scope.content_article
+  }
+
+  $scope.editArticle = function () {
+    $http.put('/articles/' + $scope.id_article + '/edit', $scope.formData)
       .success(function (data) {
+        $scope.edit = false
         $scope.formData = {}
         $scope.articles = data
         console.log(data)
@@ -68,11 +86,11 @@ function mainController ($scope, $http) {
     $http.delete('/articles/' + id + '/delete')
       .success(function (data) {
         $scope.articles = data
-        if ($scope.edit) {
-          $scope.edit = false
+        if ($scope.detail) {
+          $scope.detail = false
         }
         if (!$scope.submit) {
-          $scope.edit = true
+          $scope.submit = true
         }
         console.log(data)
         window.location.assign('http://localhost:8080')

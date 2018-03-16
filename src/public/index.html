@@ -27,51 +27,57 @@
   <div class="container">
     <!-- HEADER AND TODO COUNT -->
     <div class="jumbotron text-center">
-      <h1>Article List <span class="label label-info"></span></h1>
+      <h1 ng-if="submit">Article List <span class="label label-info"></span></h1>
+      <h1 ng-if="detail && !edit">Article Content <span class="label label-info"></span></h1>
+      <h1 ng-if="edit">Edit Article <span class="label label-info"></span></h1>
     </div>
     <div>
-      <table>
+      <table ng-if="!edit">
         <thead>
           <tr>
-            <th ng-if="submit">Title</th>
-            <th ng-if="edit">Title</th>
+            <th>Title</th>
             <th>Author</th>
-            <th ng-if="edit">Content</th>
+            <th ng-if="detail">Content</th>
             <th>post date</th>
-            <th>modify date</th>
+            <th ng-if="detail">modify date</th>
             <th ng-if="submit">detail</th>
-            <th ng-if="edit">edit</th>
+            <th ng-if="detail">edit</th>
             <th>delete</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="article in articles | orderBy : 'mDate'">
             <form>
-              <td ng-if="submit">{{ article.Title }}</td>
-              <td ng-if="edit" ><input type="text" class="form-control input-lg text-center" placeholder="{{ article.Title }}" ng-model="formData.title" ng-init = "formData.title = {{ article.Title }}"></td>
+              <td>{{ article.Title }}</td>
               <td>{{ article.Author }}</td>
-              <td ng-if="edit"><input type="text" class="form-control input-lg text-center" placeholder="{{ article.Content }}" ng-model="formData.content"></td>
+              <td ng-if="detail">{{ article.Content }}</td>
               <td>{{article.pDate}}</td>
-              <td>{{article.mDate}}</td>
-              <td ng-if="submit"><button type="button" ng-click="specificArticle(article._id)" ng-model="edit"> detail </button></td>
-              <td ng-if="edit"><button type="submit" class="btn btn-primary btn-lg" ng-click="editArticle(article._id)">Edit</button></td>
+              <td ng-if="detail">{{article.mDate}}</td>
+              <td ng-if="submit"><button type="button" ng-click="specificArticle(article._id, article.Title, article.Content)" ng-model="edit"> detail </button></td>
+              <th ng-if="detail"><button type="submit" class="btn btn-primary btn-lg" ng-click="turnToEdit()">Edit</button></td></th>
               <td><button type="button" ng-click="deleteArticle(article._id)"> delete </button></td>
             </form>
           </tr>
         </tbody>
       </table>
     </div>
+    <div ng-if = "edit">
+      article title: <input ng-model="formData.title">
+      content: <input ng-model="formData.content">
+      <button type="submit" class="btn btn-primary btn-lg" ng-click="editArticle()">Confirm</button></td>
+    </div>
+
     <div class="jumbotron text-center">
-      <h2>articles <span class="label label-info">{{ articles.length }}</span></h2>
-      <button ng-if="edit" ng-click="getArticles()">Article List</button>
+      <h2 ng-if="submit">articles <span class="label label-info">{{ articles.length }}</span></h2>
+      <button ng-if="detail" ng-click="getArticles()">Article List</button>
     </div>
     <!-- FORM TO CREATE TODOS -->
-    <div id="article-form" class="row">
+    <div id="article-form" class="row" ng-if="!edit">
       <div class="col-sm-8 col-sm-offset-2 text-center">
         <form ng-if="submit">
           <div class="form-group">
             <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-            <input type="text" class="form-control input-lg text-center" placeholder = 'title' ng-model="formData.title" ng-init = "formData.title = '未知'" ng-required = "formData.title">
+            <input type="text" class="form-control input-lg text-center" placeholder = 'title' ng-model="formData.title" ng-init = "formData.title = ' '" ng-required = "formData.title">
             <input type="text" class="form-control input-lg text-center" placeholder = 'author' ng-model="formData.author" ng-init = "formData.author = 'anonymous'" required = "formData.author">
             <input type="text" class="form-control input-lg text-center" placeholder = 'content' ng-model="formData.content" ng-init = "formData.content = ' '" >
           </div>

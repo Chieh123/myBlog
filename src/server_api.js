@@ -32,8 +32,8 @@ class apiService {
   postArticle () {
     let self = this
     console.log('self.req.query.title = ' + decodeURI(self.req.query.title))
-    console.log('self.req.query.title = ' + decodeURI(self.req.query.author))
-    console.log('self.req.query.title = ' + decodeURI(self.req.query.content))
+    console.log('self.req.query.author = ' + decodeURI(self.req.query.author))
+    console.log('self.req.query.content = ' + decodeURI(self.req.query.content))
     Article.create({
       Title: decodeURI(self.req.query.title),
       Author: decodeURI(self.req.query.author),
@@ -47,6 +47,8 @@ class apiService {
   };
   editArticle () {
     let self = this
+    console.log('self.req.query.title = ' + decodeURI(self.req.query.title))
+    console.log('self.req.query.content = ' + decodeURI(self.req.query.content))
     Article.update({
       _id: self.req.params.article_id
     }, {
