@@ -1,0 +1,25 @@
+<!--list of artucles-->
+<div ng-app="myBlogArticles">
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>post date</th>
+        <th>detail</th>
+        <th>delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="article in articles | orderBy : 'mDate'">
+        <form>
+          <td>{{ article.Title }}</td>
+          <td>{{ article.Author }}</td>
+          <td>{{article.pDate}}</td>
+          <td><button type="button" ng-click="specificArticle(article._id, article.Title, article.Content)" ng-model="edit"> detail </button></td>
+          <td><button type="button" ng-click="deleteArticle(article._id)"> delete </button></td>
+        </form>
+      </tr>
+    </tbody>
+  </table>
+</div>

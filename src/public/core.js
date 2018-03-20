@@ -1,11 +1,28 @@
-var myBlogArticles = angular.module('myBlogArticles', [])
 
-function mainController ($scope, $http) {
+var myBlogArticles = angular.module('myBlogArticles', ["ngRoute"])
+
+myBlogArticles.config(function($routeProvider){
+	$routeProvider
+  .when("/", {
+      redirectTo: '/articles', pathMatch: 'full'
+  })
+  .when("/articles", {
+      templateUrl : "home.html",
+      controller : 'mainController'
+  })
+  .when("/articles/:id", {
+      templateUrl : "detail.html"
+  })
+  .when("/postArticle", {
+      templateUrl : 'post.html',
+      controller : 'mainController'
+  })
+});
+
+myBlogArticles.controller('mainController', function($scope, $http){
+//function mainController ($scope, $http) {
   $scope.formData = {}
   // when landing on the page, get all todos and show them
-  $scope.submit = true
-  $scope.detail = false
-  $scope.edit = false
   $scope.content_article = 'content'
   $scope.title_article = 'title'
   $http.get('/articles')
@@ -21,9 +38,6 @@ function mainController ($scope, $http) {
     $scope.title_article = 'title'
     $http.get('/articles')
       .success(function (data) {
-        $scope.submit = true
-        $scope.detail = false
-        $scope.edit = false
         $scope.formData = {}
         $scope.articles = data
         console.log(data)
@@ -54,8 +68,6 @@ function mainController ($scope, $http) {
     $http.get('/articles/' + id, $scope.formData)
       .success(function (data) {
         $scope.articles = data
-        $scope.detail = true
-        $scope.submit = false
         $scope.formData = {}
       })
       .error(function (data) {
@@ -63,13 +75,10 @@ function mainController ($scope, $http) {
       })
   }
   $scope.getArticle = function () {
-    $scope.edit = false
     console.log(title)
     $http.get('/articles/' + $scope.id_article, $scope.formData)
       .success(function (data) {
         $scope.articles = data
-        $scope.detail = true
-        $scope.submit = false
         $scope.formData = {}
       })
       .error(function (data) {
@@ -78,7 +87,6 @@ function mainController ($scope, $http) {
   }
 
   $scope.turnToEdit = function () {
-    $scope.edit = true
     $scope.formData.title = $scope.title_article
     $scope.formData.content = $scope.content_article
   }
@@ -86,7 +94,6 @@ function mainController ($scope, $http) {
   $scope.editArticle = function () {
     $http.put('/articles/' + $scope.id_article + '/edit', $scope.formData)
       .success(function (data) {
-        $scope.edit = false
         $scope.formData = {}
         $scope.articles = data
         console.log(data)
@@ -100,12 +107,6 @@ function mainController ($scope, $http) {
     $http.delete('/articles/' + id + '/delete')
       .success(function (data) {
         $scope.articles = data
-        if ($scope.detail) {
-          $scope.detail = false
-        }
-        if (!$scope.submit) {
-          $scope.submit = true
-        }
         console.log(data)
         window.location.assign('http://localhost:8080')
       })
@@ -113,4 +114,5 @@ function mainController ($scope, $http) {
         console.log('Error: ' + data)
       })
   }
-}
+//}
+})

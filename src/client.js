@@ -57,6 +57,29 @@ app.delete('/articles/:article_id/delete', function (req, res) {
     res.send(body)
   })
 })
+//create an Account
+app.get('/signUp', function (req, res) {
+  //checkAccountName is userName is unique
+  request.get({url: serverurl + '/userNameUnique?userName=' + req.body.userName }, function (error, httpResponse, body) {
+    if (error) {
+      return console.error('upload failed:', error)
+    }
+    if(body === '0'){
+      request.post({url: serverurl + '/signUp?userName=' + req.body.userName + '&password=' + req.body.password }, function (error, httpResponse, body) {
+        if (error) {
+          return console.error('upload failed:', error)
+        }
+        req.body.signup = true
+        console.log(body)
+        res.send(body)
+      })
+    } else {
+      console.log('please choose another user name!')
+      res.json('failed')
+    }
+  })
+
+})
 
 app.listen(8080)
 console.log('App listening on port 8080')

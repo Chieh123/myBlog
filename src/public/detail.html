@@ -1,0 +1,31 @@
+<div class="container">
+  <!-- HEADER AND TODO COUNT -->
+  <div class="jumbotron text-center">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Content</th>
+          <th>post date</th>
+          <th>modify date</th>
+          <th>edit</th>
+          <th>delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <form>
+            <td>{{ article.Title }}</td>
+            <td>{{ article.Author }}</td>
+            <td>{{ article.Content }}</td>
+            <td>{{article.pDate}}</td>
+            <td>{{article.mDate}}</td>
+            <th><button type="submit" class="btn btn-primary btn-lg" ng-click="turnToEdit()">Edit</button></td></th>
+            <td><button type="button" ng-click="deleteArticle(article._id)"> delete </button></td>
+          </form>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,4 +1,3 @@
-
 <!-- index.html -->
 <!doctype html>
 <!-- ASSIGN OUR ANGULAR MODULE -->
@@ -10,8 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My Blog</title>
   <!-- SCROLLS -->
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bo
-  \otstrap.min.css"><!-- load bootstrap -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
   <style>
     html                    { overflow-y:scroll; }
     body                    { padding-top:50px; }
@@ -20,83 +18,24 @@
   <!-- SPELLS -->
   <script src="//cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script><!-- load jquery -->
   <script src="//lib.sinaapp.com/js/angular.js/angular-1.2.19/angular.min.js"></script><!-- load angular -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script>
   <script src="core.js"></script>
   <link href="styles.css" rel="stylesheet">
+  <base href="/">
 </head>
 <!-- SET THE CONTROLLER AND GET ALL TODOS -->
 <body ng-controller="mainController">
   <div class="container">
-    <!-- HEADER AND TODO COUNT -->
     <div class="jumbotron text-center">
-      <h1 ng-if="submit">Article List <span class="label label-info"></span></h1>
-      <h1 ng-if="detail && !edit">Article Content <span class="label label-info"></span></h1>
-      <h1 ng-if="edit">Edit Article <span class="label label-info"></span></h1>
-    </div>
-    <!--list of artucles-->
-    <div>
-      <table ng-if="!edit">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th ng-if="detail">Content</th>
-            <th>post date</th>
-            <th ng-if="detail">modify date</th>
-            <th ng-if="submit">detail</th>
-            <th ng-if="detail">edit</th>
-            <th>delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="article in articles | orderBy : 'mDate'">
-            <form>
-              <td>{{ article.Title }}</td>
-              <td>{{ article.Author }}</td>
-              <td ng-if="detail">{{ article.Content }}</td>
-              <td>{{article.pDate}}</td>
-              <td ng-if="detail">{{article.mDate}}</td>
-              <td ng-if="submit"><button type="button" ng-click="specificArticle(article._id, article.Title, article.Content)" ng-model="edit"> detail </button></td>
-              <th ng-if="detail"><button type="submit" class="btn btn-primary btn-lg" ng-click="turnToEdit()">Edit</button></td></th>
-              <td><button type="button" ng-click="deleteArticle(article._id)"> delete </button></td>
-            </form>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <!--edit artucle-->
-    <div id="edit-article-form" class="row" ng-if="edit">
-      <div class="col-sm-8 col-sm-offset-2 text-center">
-        <form ng-if="edit" name="editForm">
-          <div class="form-group">
-            <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-            article title: <input name = "article_title" type = 'text' class="form-control input-lg text-center" ng-model="formData.title" ng-required = "true"></input>
-            content: <textarea name = "article_content" class="form-control input-lg text-center" ng-model="formData.content" ng-required = "true"></textarea>
-          </div>
-            <!-- createToDo() WILL CREATE NEW TODOS -->
-            <button ng-if="editForm.article_title.$valid && editForm.article_content.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="editArticle()">Confirm</button>
-        </form>
-      </div>
-    </div>
-    <!--the router-->
-    <div class="jumbotron text-center">
-      <button ng-if="detail" ng-click="getArticles()">Article List</button>
-      <button ng-if="edit" ng-click="getArticle()">Go Back</button>
-    </div>
-    <!-- FORM TO CREATE article -->
-    <div id="article-form" class="row" ng-if="!edit">
-      <div class="col-sm-8 col-sm-offset-2 text-center">
-        <form ng-if="submit" name="postForm">
-          <div class="form-group">
-            <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-            title: <input name = "article_title" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your title' ng-model="formData.title"  ng-required = "true"></input>
-            author: <input name = "article_author" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your name' ng-model="formData.author"  ng-required = "true"></input>
-            content: <textarea class="form-control input-lg text-center" placeholder = 'please type ypur article' ng-model="formData.content" ></textarea>
-          </div>
-            <!-- createToDo() WILL CREATE NEW TODOS -->
-            <button ng-if="postForm.article_title.$valid && postForm.article_author.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="postArticle()">Submit</button>
-        </form>
-      </div>
+      <h1>MY BLOG <span class="label label-info"></span></h1>
+      <a href="#/articles">article list</a>
+      <a href="#/postArticle">post article</a>
+      <a href="#/signIn">sign in</a>
+      <a href="#/signUp">sign up</a>
+      <a ng-if = "login" href="#/logOut">log out</a>
     </div>
   </div>
+  <div ng-view></div>
+
 </body>
 </html>

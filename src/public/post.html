@@ -1,0 +1,16 @@
+<!-- FORM TO CREATE article -->
+<div id="article-form" class="row">
+  <div class="col-sm-8 col-sm-offset-2 text-center">
+    <form name="postForm">
+      <div class="form-group">
+        <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+        title: <input name = "article_title" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your title' ng-model="formData.title"  ng-required = "true"></input>
+        author: <input name = "article_author" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your name' ng-model="formData.author"  ng-required = "true"></input>
+        content: <textarea class="form-control input-lg text-center" placeholder = 'please type ypur article' ng-model="formData.content" ></textarea>
+        <!-- createToDo() WILL CREATE NEW TODOS -->
+        <button ng-if="postForm.article_title.$valid && postForm.article_author.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="postArticle()">Submit</button>
+      </div>
+    </form>
+  </div>
+
+</div>

@@ -72,6 +72,18 @@ textarea {
     background-color: #f8f8f8;
     resize: none;
 }
+a:link, a:visited {
+    background-color: #cfd8dc;
+    color: black;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+a:hover, a:active {
+    background-color: gray;
+    color: white;
+}
 
 /*
 Copyright 2017-2018 Google Inc. All Rights Reserved.

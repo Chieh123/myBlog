@@ -38,6 +38,15 @@ app.delete('/articles/:article_id/delete', function (req, res) {
   let apiServiceObj = new ApiService(req, res)
   apiServiceObj.deleteArticle()
 })
-
+//creat an Account
+app.post('/signUp', function (req, res) {
+  let apiServiceObj = new ApiService(req, res)
+  apiServiceObj.signUp()
+})
+//check userName is unique
+app.get('/userNameUnique', function (req, res) {
+  let apiServiceObj = new ApiService(req, res)
+  apiServiceObj.userNameUnique()
+})
 app.listen(8200)
 console.log('App listening on port 8200')
