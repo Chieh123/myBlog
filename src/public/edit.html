@@ -1,11 +1,11 @@
 <!--edit artucle-->
-<div id="edit-article-form" class="row" ng-if="edit && !signin && !signup">
+<div id="edit-article-form" class="row">
   <div class="col-sm-8 col-sm-offset-2 text-center">
-    <form ng-if="edit" name="editForm">
+    <form name="editForm">
       <div class="form-group">
         <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-        article title: <input name = "article_title" type = 'text' class="form-control input-lg text-center" ng-model="formData.title" ng-required = "true"></input>
-        content: <textarea name = "article_content" class="form-control input-lg text-center" ng-model="formData.content" ng-required = "true"></textarea>
+        article title: <input name = "article_title" type = 'text' class="form-control input-lg text-center" ng-model="formData.title" ng-init = "formData.title ='{{article.Title}}'" ng-required = "true"></input>
+        content: <textarea name = "article_content" class="form-control input-lg" ng-model="formData.content" ng-init = "formData.content ='{{article.Content}}'" ng-required = "true"></textarea>
       </div>
         <!-- createToDo() WILL CREATE NEW TODOS -->
         <button ng-if="editForm.article_title.$valid && editForm.article_content.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="editArticle()">Confirm</button>

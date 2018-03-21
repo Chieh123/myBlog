@@ -58,27 +58,28 @@ app.delete('/articles/:article_id/delete', function (req, res) {
   })
 })
 //create an Account
-app.get('/signUp', function (req, res) {
-  //checkAccountName is userName is unique
-  request.get({url: serverurl + '/userNameUnique?userName=' + req.body.userName }, function (error, httpResponse, body) {
+app.post('/signUp', function (req, res) {
+  console.log("in client sign up")
+  console.log("req.body.user_name = " + req.body.user_name )
+  console.log("req.body.user_password = " + req.body.user_password )
+  request.post({url: serverurl + '/signUp?userName=' + req.body.user_name + '&userPassword=' + req.body.user_password }, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }
-    if(body === '0'){
-      request.post({url: serverurl + '/signUp?userName=' + req.body.userName + '&password=' + req.body.password }, function (error, httpResponse, body) {
-        if (error) {
-          return console.error('upload failed:', error)
-        }
-        req.body.signup = true
-        console.log(body)
-        res.send(body)
-      })
-    } else {
-      console.log('please choose another user name!')
-      res.json('failed')
+    req.body.signup = true
+    console.log(body)
+    res.send(body)
+  })
+})
+app.get('/signIn', function (req, res) {
+  console.log("in client sign in")
+  console.log("req.body.user_name = " + req.body.user_name )
+  console.log("req.body.user_password = " + req.body.user_password )
+  request.get({url: serverurl + '/signIn?userName=' + req.body.user_name + '&userPassword=' + req.body.user_password }, function (error, httpResponse, body) {
+    if (error) {
+      return console.error('upload failed:', error)
     }
   })
-
 })
 
 app.listen(8080)

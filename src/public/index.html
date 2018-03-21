@@ -28,11 +28,12 @@
   <div class="container">
     <div class="jumbotron text-center">
       <h1>MY BLOG <span class="label label-info"></span></h1>
-      <a href="#/articles">article list</a>
+      <p ng-if = "login"> Welcome {{user_name}}</p>
+      <a href="#/articles" ng-click="getArticles()">article list</a>
       <a href="#/postArticle">post article</a>
       <a href="#/signIn">sign in</a>
       <a href="#/signUp">sign up</a>
-      <a ng-if = "login" href="#/logOut">log out</a>
+      <a ng-if = "login" href="#/logOut" ng-click="logOut()">log out</a>
     </div>
   </div>
   <div ng-view></div>

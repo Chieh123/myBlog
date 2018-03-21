@@ -24,11 +24,11 @@ class apiService {
     let self = this
     Article.find({
       _id: self.req.params.article_id
-    }, function (err, articles) {
+    }, function (err, article) {
       if (err) {
         self.res.send(err)
       }
-      self.res.send(articles)
+      self.res.send(article)
     })
   };
   //todo
@@ -89,34 +89,67 @@ class apiService {
   //sugn up
   signUp () {
     let self = this
+    console.log("in signUp")
     console.log('self.req.query.userName = ' + self.req.query.userName)
-    console.log('self.req.query.password = ' + self.req.query.password)
+    console.log('self.req.query.userPassword = ' + String(self.req.query.userPassword))
+    self.mySignUp()
+
+  }
+  createAccount (userName, password) {
+    console.log("in createAccount")
+    let self = this
     User.create({
       Account: self.req.query.userName,
-      Password: self.req.query.password,
+      Password: String(self.req.query.userPassword)
     }, function (err) {
       if (err) {
         self.res.send(err)
       }
       console.log("success create")
+      self.signIn()
       self.res.send('post success')
     })
   }
   //checkAccountName is userName is unique
-  userNameUnique () {
+  mySignUp () {
+    console.log("in mySignUp")
     let self = this
-    console.log('self.req.query.userName = ' + self.req.query.userName)
+    var result = false
+    console.log('user_name = ' + self.req.query.userName)
     User.count({
       Account: self.req.query.userName
     }, function (err, c) {
       if (err) {
+        callback(err)
         self.res.send(err)
       }
-      console.log("c = " + c)
-      self.res.json(c)
+      if(c === 0){
+        self.createAccount()
+      } else {
+        self.res.send("the user name need to change")
+      }
     })
   }
-
+  //sign in
+  signIn () {
+    console.log("in singIn")
+    let self = this
+    console.log('self.req.query.userName = ' + self.req.query.userName)
+    console.log('self.req.query.userPassword = ' + self.req.query.userPassword)
+    User.count({
+      Account: self.req.query.userName,
+      Password: self.req.query.password,
+    }, function (err, c) {
+      if (err) {
+        self.res.send(err)
+      }
+      if(c === 1){
+        self.res.send(self.req.query.userName)
+      } else {
+        self.res.send("accoun or password is wrong")
+      }
+    })
+  }
 
 
 }

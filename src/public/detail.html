@@ -5,27 +5,35 @@
       <thead>
         <tr>
           <th>Title</th>
+          <td>{{ article.Title }}</td>
+        </tr>
+        <tr>
           <th>Author</th>
-          <th>Content</th>
-          <th>post date</th>
-          <th>modify date</th>
-          <th>edit</th>
-          <th>delete</th>
+          <td>{{ article.Author }}</td>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <th>Content</th>
           <form>
-            <td>{{ article.Title }}</td>
-            <td>{{ article.Author }}</td>
             <td>{{ article.Content }}</td>
-            <td>{{article.pDate}}</td>
-            <td>{{article.mDate}}</td>
-            <th><button type="submit" class="btn btn-primary btn-lg" ng-click="turnToEdit()">Edit</button></td></th>
-            <td><button type="button" ng-click="deleteArticle(article._id)"> delete </button></td>
           </form>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <th><p> post date:</p></th>
+          <th><p> {{article.pDate}}</p></th>
+        </tr>
+        <tr>
+          <th><p> modify date </p></th>
+          <th><p> {{article.mDate}}</p></th>
+        </tr>
+      </tfoot>
     </table>
+    <div>
+      <a href="#/articles/{{article._id}}/edit">edit</a>
+      <button type="button" ng-click="deleteArticle(article._id)"> delete </button>
+    </div>
   </div>
 </div>

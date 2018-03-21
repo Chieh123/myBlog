@@ -43,10 +43,10 @@ app.post('/signUp', function (req, res) {
   let apiServiceObj = new ApiService(req, res)
   apiServiceObj.signUp()
 })
-//check userName is unique
-app.get('/userNameUnique', function (req, res) {
+//log in
+app.get('/signIn', function (req, res) {
   let apiServiceObj = new ApiService(req, res)
-  apiServiceObj.userNameUnique()
+  apiServiceObj.signIn()
 })
 app.listen(8200)
 console.log('App listening on port 8200')

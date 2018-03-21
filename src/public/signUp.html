@@ -1,10 +1,10 @@
-<div id="sign-up-form" class="row" ng-if="signup">
+<div id="sign-up-form" class="row">
   <div class="col-sm-8 col-sm-offset-2 text-center">
     <form name="signUpForm">
       <div class="form-group">
         <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-        account: <input name = "user_name" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your account name' ng-model="formData.userName"  ng-required = "true"></input>
-        password: <input name = "user_pwd" type = 'password' class="form-control input-lg text-center" placeholder = 'please type your password' ng-model="formData.password"  ng-required = "true"></input>
+        account: <input name = "user_name" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your account name' ng-model="formData.user_name"  ng-required = "true"></input>
+        password: <input name = "user_pwd" type = 'password' class="form-control input-lg text-center" placeholder = 'please type your password' ng-model="formData.user_password"  ng-required = "true"></input>
         <!-- createToDo() WILL CREATE NEW TODOS -->
         <button ng-if="signUpForm.user_name.$valid && signUpForm.user_pwd.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="signUp()">Submit</button>
       </div>
