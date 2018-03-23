@@ -1,7 +1,7 @@
 <!-- index.html -->
 <!doctype html>
 <!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="myBlogArticles">
+<html ng-app="myBlogArticles" lang="zh-Hant-TW">
 <head>
   <!-- META -->
   <meta charset="utf-8">
@@ -9,17 +9,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My Blog</title>
   <!-- SCROLLS -->
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
-  <style>
-    html                    { overflow-y:scroll; }
-    body                    { padding-top:50px; }
-    #article-list              { margin-bottom:30px; }
-  </style>
   <!-- SPELLS -->
-  <script src="//cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script><!-- load jquery -->
-  <script src="//lib.sinaapp.com/js/angular.js/angular-1.2.19/angular.min.js"></script><!-- load angular -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script><!-- load jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script><!-- load angular -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script>
   <script src="core.js"></script>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
   <link href="styles.css" rel="stylesheet">
   <base href="/">
 </head>
@@ -29,11 +24,11 @@
     <div class="jumbotron text-center">
       <h1>MY BLOG <span class="label label-info"></span></h1>
       <p ng-if = "login"> Welcome {{user_name}}</p>
-      <a href="#/articles" ng-click="getArticles()">article list</a>
-      <a href="#/postArticle">post article</a>
-      <a href="#/signIn">sign in</a>
-      <a href="#/signUp">sign up</a>
-      <a ng-if = "login" href="#/logOut" ng-click="logOut()">log out</a>
+      <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
+      <a href="#/postArticle"><button>post article</button></a>
+      <a href="#/signIn"><button>sign in</button></a>
+      <a href="#/signUp"><button>sign up</button></a>
+      <a ng-if = "login" href="#/logOut" ng-click="logOut()"><button>log out</button></a>
     </div>
   </div>
   <div ng-view></div>

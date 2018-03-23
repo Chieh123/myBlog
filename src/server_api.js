@@ -54,25 +54,21 @@ class apiService {
     let self = this
     console.log('self.req.query.title = ' + decodeURI(self.req.query.title))
     console.log('self.req.query.content = ' + decodeURI(self.req.query.content))
+    console.log('self.req.params.article_id = ' + decodeURI(self.req.params.article_id))
     Article.update({
       _id: self.req.params.article_id
     }, {
       Title: decodeURI(self.req.query.title),
       Content: decodeURI(self.req.query.content),
       mDate: Date.now()
-    }, function (err, todo) {
+    }, function (err, article) {
       if (err) {
         self.res.send(err)
       }
+      console.log("in server edit article = " + article)
+      self.res.send(article)
     })
-    Article.find({
-      _id: self.req.params.article_id
-    }, function (err, articles) {
-      if (err) {
-        self.res.send(err)
-      }
-      self.res.send(articles)
-    })
+
   }
   //todo
   deleteArticle () {

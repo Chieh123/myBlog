@@ -6,7 +6,7 @@ var myBlogArticles = angular.module('myBlogArticles', ["ngRoute"])
 myBlogArticles.config(function($routeProvider){
 	$routeProvider
   .when("/", {
-      redirectTo: '/articles', pathMatch: 'full'
+      redirectTo: '/articles', prefix: 'full'
   })
   .when("/articles", {
       templateUrl : "home.html",
@@ -34,7 +34,7 @@ myBlogArticles.config(function($routeProvider){
   })
 });
 
-myBlogArticles.controller('mainController', function($scope, $http){
+myBlogArticles.controller('mainController', function($scope, $http, $routeParams){
   $scope.formData = {}
   // when landing on the page, get all todos and show them
   $scope.login = false
@@ -53,45 +53,14 @@ myBlogArticles.controller('mainController', function($scope, $http){
         console.log('Error: ' + data)
       })
   }
-  // show specific article
-  $scope.specificArticle = function (id, title, content) {
-    $scope.id_article = id
-    $scope.content_article = content
-    $scope.title_article = title
-    console.log(title)
-    $http.get('/articles/' + id, $scope.formData)
-      .success(function (data) {
-        $scope.articles = data
-        $scope.formData = {}
-        console.log(data)
-      })
-      .error(function (data) {
-        console.log('Error: ' + data)
-      })
-  }
-  $scope.getArticle = function () {
-    console.log(title)
-    $http.get('/articles/' + $scope.id_article, $scope.formData)
-      .success(function (data) {
-        $scope.articles = data
-        $scope.formData = {}
-      })
-      .error(function (data) {
-        console.log('Error: ' + data)
-      })
-  }
-
-  $scope.turnToEdit = function () {
-    $scope.formData.title = $scope.title_article
-    $scope.formData.content = $scope.content_article
-  }
-
   $scope.editArticle = function () {
-    $http.put('/articles/' + $scope.id_article + '/edit', $scope.formData)
+    $http.put('/articles/' +$routeParams.id + '/edit', $scope.formData)
       .success(function (data) {
         $scope.formData = {}
         $scope.articles = data
-        console.log(data)
+        console.log("edit" + data)
+				console.log($routeParams.id)
+				window.history.back();
       })
       .error(function (data) {
         console.log('Error: ' + data)

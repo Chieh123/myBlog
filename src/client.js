@@ -41,6 +41,7 @@ app.post('/postArticle', function (req, res) {
 })
 // update specific article
 app.put('/articles/:article_id/edit', function (req, res) {
+  console.log("app.put edit")
   request.put({url: serverurl + '/articles/' + req.params.article_id + '/edit?title=' + encodeURI(req.body.title) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
