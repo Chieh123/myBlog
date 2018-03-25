@@ -1,5 +1,6 @@
 <div>
   <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
+  <a href="#/signUp" ng-if = "!login"><button>sign up</button></a>
 </div>
 <div id="sign-in-form" class="row">
   <div class="col-sm-8 col-sm-offset-2 text-center">
@@ -10,6 +11,7 @@
         password: <input name = "user_pwd" type = 'password' class="form-control input-lg text-center" placeholder = 'please type your password' ng-model="formData.user_password"  ng-required = "true"></input>
         <!-- createToDo() WILL CREATE NEW TODOS -->
         <button ng-if="signInForm.user_name.$valid && signInForm.user_pwd.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="signIn()">Submit</button>
+        <p> if successfully log in, you will be led to another page.</p>
       </div>
     </form>
   </div>

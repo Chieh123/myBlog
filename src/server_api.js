@@ -58,7 +58,7 @@ class apiService {
     console.log('self.req.params.article_id = ' + decodeURI(self.req.params.article_id))
     Article.update({
       _id: self.req.params.article_id,
-      user_id: self.req.params.article_id
+      user_id: self.req.params.user_id
     }, {
       Title: decodeURI(self.req.query.title),
       Content: decodeURI(self.req.query.content),
@@ -104,7 +104,6 @@ class apiService {
       }
       console.log('success create')
       self.signIn()
-      self.res.send('post success')
     })
   }
   // checkAccountName is userName is unique

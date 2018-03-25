@@ -115,7 +115,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         console.log('data = ' + data)
         $scope.formData = {}
         console.log('data.length' + data.length)
-        if (data.length === 12) {
+        if (data.length === 1) {
           logIn.user_id = data[0]._id
           window.location.assign('http://localhost:8080/#/users/' + logIn.user_id)
           logIn.login = true
