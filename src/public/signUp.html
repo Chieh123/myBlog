@@ -1,12 +1,18 @@
+<div>
+  <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
+</div>
 <div id="sign-up-form" class="row">
   <div class="col-sm-8 col-sm-offset-2 text-center">
     <form name="signUpForm">
       <div class="form-group">
         <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
         account: <input name = "user_name" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your account name' ng-model="formData.user_name"  ng-required = "true"></input>
+        <div ng-if="signUpForm.$pending.usernameExists">checking....</div>
+        <div ng-if="signUpForm.$error.usernameExists">username exists already</div>
         password: <input name = "user_pwd" type = 'password' class="form-control input-lg text-center" placeholder = 'please type your password' ng-model="formData.user_password"  ng-required = "true"></input>
         <!-- createToDo() WILL CREATE NEW TODOS -->
         <button ng-if="signUpForm.user_name.$valid && signUpForm.user_pwd.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="signUp()">Submit</button>
+        <p>if the account creates successfully, you will be led to another page.</p>
       </div>
     </form>
   </div>

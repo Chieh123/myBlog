@@ -1,0 +1,22 @@
+<div>
+  <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
+  <a ng-if = "login" href="#/postArticle"><button>post article</button></a>
+  <a ng-if = "login" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
+</div>
+<div class="container">
+  <!-- HEADER AND TODO COUNT -->
+  <div class="jumbotron text-center">
+    <table>
+      <thead>
+        <tr>
+          <th>account</th>
+          <td>{{ user.Account }}</td>
+        </tr>
+        <tr>
+          <th>password</th>
+          <td>{{ user.Password }}</td>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>

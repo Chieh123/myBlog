@@ -31,8 +31,8 @@ app.get('/articles/:article_id', function (req, res) {
   })
 })
 // create Todo and send back all todos after creation
-app.post('/postArticle', function (req, res) {
-  request.post({url: serverurl + '/postArticle?title=' + encodeURI(req.body.title) + '&author=' + encodeURI(req.body.author) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
+app.post('/postArticle/:user_id', function (req, res) {
+  request.post({url: serverurl + '/postArticle/' + req.params.user_id + '?title=' + encodeURI(req.body.title) + '&author=' + encodeURI(req.body.author) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }
@@ -41,8 +41,8 @@ app.post('/postArticle', function (req, res) {
 })
 // update specific article
 app.put('/articles/:article_id/edit', function (req, res) {
-  console.log("app.put edit")
-  request.put({url: serverurl + '/articles/' + req.params.article_id + '/edit?title=' + encodeURI(req.body.title) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
+  console.log('app.put edit')
+  request.put({url: serverurl + '/articles/' + req.params.article_id + '/edit/' + req.query.user_id + '?title=' + encodeURI(req.body.title) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }
@@ -51,19 +51,19 @@ app.put('/articles/:article_id/edit', function (req, res) {
 })
 // delete a todo
 app.delete('/articles/:article_id/delete', function (req, res) {
-  request.delete({url: serverurl + '/articles/' + req.params.article_id + '/delete'}, function (error, httpResponse, body) {
+  request.delete({ url: serverurl + '/articles/' + req.params.article_id + '/delete/' + req.query.user_id }, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }
     res.send(body)
   })
 })
-//create an Account
+// create an Account
 app.post('/signUp', function (req, res) {
-  console.log("in client sign up")
-  console.log("req.body.user_name = " + req.body.user_name )
-  console.log("req.body.user_password = " + req.body.user_password )
-  request.post({url: serverurl + '/signUp?userName=' + req.body.user_name + '&userPassword=' + req.body.user_password }, function (error, httpResponse, body) {
+  console.log('in client sign up')
+  console.log('req.body.user_name = ' + req.body.user_name)
+  console.log('req.body.user_password = ' + req.body.user_password)
+  request.post({ url: serverurl + '/signUp?userName=' + req.body.user_name + '&userPassword=' + req.body.user_password }, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }
@@ -72,14 +72,34 @@ app.post('/signUp', function (req, res) {
     res.send(body)
   })
 })
-app.get('/signIn', function (req, res) {
-  console.log("in client sign in")
-  console.log("req.body.user_name = " + req.body.user_name )
-  console.log("req.body.user_password = " + req.body.user_password )
-  request.get({url: serverurl + '/signIn?userName=' + req.body.user_name + '&userPassword=' + req.body.user_password }, function (error, httpResponse, body) {
+app.post('/signIn', function (req, res) {
+  console.log('in client sign in')
+  console.log('req.body.user_name = ' + req.body.user_name)
+  console.log('req.body.user_password = ' + req.body.user_password)
+  request.get({ url: serverurl + '/signIn?userName=' + req.body.user_name + '&userPassword=' + req.body.user_password }, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }
+    console.log('client log in')
+    res.send(body)
+  })
+})
+app.get('/usernameAvailable/:user_name', function (req, res) {
+  console.log('req.params.user_name = ' + req.params.user_name)
+  request.get({url: serverurl + '/usernameAvailable?userName=' + req.params.user_name}, function (error, httpResponse, body) {
+    if (error) {
+      return console.error('upload failed:', error)
+    }
+    //    console.log(body)
+    res.send(body)
+  })
+})
+app.get('/users/:id', function (req, res) {
+  request.get({url: serverurl + '/users/' + req.params.id}, function (error, httpResponse, body) {
+    if (error) {
+      return console.error('upload failed:', error)
+    }
+    res.send(body)
   })
 })
 
