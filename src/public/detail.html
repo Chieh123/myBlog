@@ -1,8 +1,9 @@
 <div>
-  <a href="#/signIn" ng-if = "!login"><button>sign in</button></a>
-  <a href="#/signUp" ng-if = "!login"><button>sign up</button></a>
-  <a ng-if = "login" href="#/postArticle"><button>post article</button></a>
-  <a ng-if = "login" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
+  <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
+  <a ng-if = "login == 'true'" href="#/postArticle"><button>post article</button></a>
+  <a href="#/signIn" ng-if = "login == 'false'"><button>sign in</button></a>
+  <a href="#/signUp" ng-if = "login == 'false'"><button>sign up</button></a>
+  <a ng-if = "login == 'true'" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
 </div>
 <div class="container">
   <!-- HEADER AND TODO COUNT -->

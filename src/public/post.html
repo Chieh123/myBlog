@@ -1,6 +1,9 @@
 <div>
   <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
-  <a ng-if = "login" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
+  <a href="#/signIn" ng-if = "login == 'false'"><button>sign in</button></a>
+  <a href="#/signUp" ng-if = "login == 'false'"><button>sign up</button></a>
+  <a ng-if = "login == 'true'" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
+  {{login}}
 </div>
 <!-- FORM TO CREATE article -->
 <div id="article-form" class="row">

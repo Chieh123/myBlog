@@ -1,5 +1,5 @@
 
-var myBlogArticles = angular.module('myBlogArticles', ['ngRoute'])
+var myBlogArticles = angular.module('myBlogArticles', ['ngRoute', 'ngCookies'])
 myBlogArticles.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
@@ -38,14 +38,16 @@ myBlogArticles.config(function ($routeProvider) {
       controller: 'articlesController'
     })
 })
-myBlogArticles.service('logIn', function () {
-  this.login = false
-  this.user_id = '00000'
+myBlogArticles.service('logIn', function ($cookies) {
+  this.login = $cookies.get('login')
+  this.user_id = $cookies.get('user_id')
+  $cookies.put('user_id', '0000');
+  $cookies.put('user_id', false);
 })
-myBlogArticles.controller('mainController', function ($scope, $http, $routeParams, logIn) {
+myBlogArticles.controller('mainController', function ($scope, $http, $routeParams, logIn,$cookies) {
   $scope.formData = {}
   $scope.user_id = logIn.user_id
-  $scope.login = logIn.login
+  $scope.login = $cookies.get('login',logIn.login)
   // when landing on the page, get all todos and show them
   $scope.content_article = 'content'
   $scope.title_article = 'title'
@@ -97,8 +99,8 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         console.log('data.length = ' + data.length)
         if (data.length === 1) {
           logIn.user_id = data[0]._id
-          logIn.login = true
-          console.log('logIn.login = ' + logIn.login)
+          $cookies.put('login', true);
+          console.log('logIn.login = ' + $cookies.get('login'))
           window.location.assign('http://localhost:8080/#/users/' + logIn.user_id)
           console.log(logIn.user_id)
         }
@@ -118,7 +120,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         if (data.length === 1) {
           logIn.user_id = data[0]._id
           window.location.assign('http://localhost:8080/#/users/' + logIn.user_id)
-          logIn.login = true
+          $cookies.put('login', true);
         } else {
           console.log('the account name is not unique')
         }
@@ -129,15 +131,17 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
       })
   }
   $scope.logOut = function () {
-    logIn.login = false
-    logIn.user_if = '0000'
-    window.location.assign('http://localhost:8080')
+    $cookies.put('login', false);
+    $cookies.get('login');
+    console.log('when logout login = ' + $cookies.get('login'))
+    console.log('$scope.login = ' + $scope.login)
+    //window.location.assign('http://localhost:8080')
   }
 })
-  .controller('articlesController', function ($scope, $http, logIn) {
-    $scope.login = logIn.login
+  .controller('articlesController', function ($scope, $http, logIn, $cookies) {
+    $scope.login = $cookies.get('login')
     console.log('in articles controller')
-    console.log('logIn.login = ' + logIn.login)
+    console.log('login = ' + $cookies.get('login'))
     $http.get('/articles')
       .success(function (data) {
         $scope.articles = data
@@ -147,8 +151,8 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         console.log('Error: ' + data)
       })
   })
-  .controller('detailController', function ($scope, $http, $routeParams, logIn) {
-    $scope.login = logIn.login
+  .controller('detailController', function ($scope, $http, $routeParams, logIn, $cookies) {
+    $scope.login = $cookies.get('login')
     console.log('$routeParams.id = ' + $routeParams.id)
     $http.get('/articles/' + $routeParams.id, $scope.formData)
       .success(function (data) {
@@ -160,8 +164,8 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         console.log('Error: ' + data)
       })
   })
-  .controller('editController', function ($scope, $http, $routeParams, logIn) {
-    $scope.login = logIn.login
+  .controller('editController', function ($scope, $http, $routeParams, logIn, $cookies ) {
+    $scope.login = $cookies.get('login')
     console.log('$routeParams.id = ' + $routeParams.id)
     $http.get('/articles/' + $routeParams.id, $scope.formData)
       .success(function (data) {
@@ -174,9 +178,10 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         console.log('Error: ' + data)
       })
   })
-  .controller('accountController', function ($scope, $http, $routeParams, logIn) {
-    $scope.login = logIn.login
-    console.log('logIn.login = ' + logIn.login)
+  .controller('accountController', function ($scope, $http, $routeParams, logIn, $cookies) {
+    $scope.login = $cookies.get('login')
+    console.log('$cookies.get(login) = ' + typeof $cookies.get('login'))
+    console.log('$scope.login = ' + typeof $scope.login)
     $http.get('/users/' + $routeParams.id)
       .success(function (data) {
         $scope.user = data[0]

@@ -5,6 +5,7 @@
   "main": "server.js",
   "author": "Scotch",
   "dependencies": {
+    "angular-cookies": "^1.4.14",
     "express": "~3.4.4",
     "fs": "0.0.1-security",
     "mongodb": "^3.0.3",

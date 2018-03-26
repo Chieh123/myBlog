@@ -1,6 +1,6 @@
 <div>
   <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
-  <a href="#/signUp" ng-if = "!login"><button>sign up</button></a>
+  <a href="#/signUp" ng-if = "login == 'false'"><button>sign up</button></a>
 </div>
 <div id="sign-in-form" class="row">
   <div class="col-sm-8 col-sm-offset-2 text-center">
