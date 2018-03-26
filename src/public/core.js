@@ -42,18 +42,17 @@ myBlogArticles.service('logIn', function ($cookies) {
   this.login = $cookies.get('login')
   this.user_id = $cookies.get('user_id')
   $cookies.put('user_id', '0000');
-  $cookies.put('user_id', false);
 })
 myBlogArticles.controller('mainController', function ($scope, $http, $routeParams, logIn,$cookies) {
   $scope.formData = {}
-  $scope.user_id = logIn.user_id
-  $scope.login = $cookies.get('login',logIn.login)
+  $scope.user_id = $cookies.get('login')
+  $scope.login = $cookies.get('user_id')
   // when landing on the page, get all todos and show them
   $scope.content_article = 'content'
   $scope.title_article = 'title'
   // when submitting the add form, send the text to the node API
   $scope.postArticle = function () {
-    $http.post('/postArticle/' + $scope.user_id, $scope.formData)
+    $http.post('/postArticle/' + $cookies.get('user_id'), $scope.formData)
       .success(function (data) {
         $scope.formData = {}
         $scope.articles = data
@@ -65,7 +64,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
       })
   }
   $scope.editArticle = function () {
-    $http.put('/articles/' + $routeParams.id + '/edit?user_id=' + logIn.user_id, $scope.formData)
+    $http.put('/articles/' + $routeParams.id + '/edit?user_id=' + $cookies.get('user_id'), $scope.formData)
       .success(function (data) {
         $scope.formData = {}
         $scope.articles = data
@@ -79,8 +78,8 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
   }
 
   $scope.deleteArticle = function (id) {
-    console.log(logIn.user_id)
-    $http.delete('/articles/' + id + '/delete?user_id=' + logIn.user_id)
+    console.log($scope.user_id)
+    $http.delete('/articles/' + id + '/delete?user_id=' + $cookies.get('user_id'))
       .success(function (data) {
         $scope.articles = data
         console.log(data)
@@ -98,11 +97,12 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         $scope.formData = {}
         console.log('data.length = ' + data.length)
         if (data.length === 1) {
-          logIn.user_id = data[0]._id
           $cookies.put('login', true);
           console.log('logIn.login = ' + $cookies.get('login'))
-          window.location.assign('http://localhost:8080/#/users/' + logIn.user_id)
-          console.log(logIn.user_id)
+          $cookies.put('user_id', data[0]._id);
+          window.location.assign('http://localhost:8080/#/users/' + $cookies.get('user_id'))
+          console.log("$scope.user_id = " + $scope.user_id)
+          console.log("$cookies.get(user_id) = " + $cookies.get('user_id'))
         }
         console.log(data)
       })
@@ -118,8 +118,9 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         $scope.formData = {}
         console.log('data.length' + data.length)
         if (data.length === 1) {
-          logIn.user_id = data[0]._id
-          window.location.assign('http://localhost:8080/#/users/' + logIn.user_id)
+          $scope.user_id = data[0]._id
+          $cookies.put('user_id', data[0]._id);
+          window.location.assign('http://localhost:8080/#/users/' + $cookies.get('user_id'))
           $cookies.put('login', true);
         } else {
           console.log('the account name is not unique')
@@ -132,6 +133,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
   }
   $scope.logOut = function () {
     $cookies.put('login', false);
+    $cookies.put('user_id', 0);
     $cookies.get('login');
     console.log('when logout login = ' + $cookies.get('login'))
     console.log('$scope.login = ' + $scope.login)
