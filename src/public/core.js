@@ -1,4 +1,3 @@
-
 var myBlogArticles = angular.module('myBlogArticles', ['ngRoute', 'ngCookies'])
 myBlogArticles.config(function ($routeProvider) {
   $routeProvider
@@ -41,17 +40,17 @@ myBlogArticles.config(function ($routeProvider) {
 myBlogArticles.service('logIn', function ($cookies) {
   this.login = $cookies.get('login')
   this.user_id = $cookies.get('user_id')
-  $cookies.put('user_id', '0000');
 })
 myBlogArticles.controller('mainController', function ($scope, $http, $routeParams, logIn,$cookies) {
   $scope.formData = {}
-  $scope.user_id = $cookies.get('login')
-  $scope.login = $cookies.get('user_id')
+  $scope.user_id = $cookies.get('user_id')
+  $scope.login = $cookies.get('login')
   // when landing on the page, get all todos and show them
   $scope.content_article = 'content'
   $scope.title_article = 'title'
   // when submitting the add form, send the text to the node API
   $scope.postArticle = function () {
+    console.log("$cookies.get(user_id) = " + $cookies.get('user_id'))
     $http.post('/postArticle/' + $cookies.get('user_id'), $scope.formData)
       .success(function (data) {
         $scope.formData = {}
@@ -100,6 +99,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
           $cookies.put('login', true);
           console.log('logIn.login = ' + $cookies.get('login'))
           $cookies.put('user_id', data[0]._id);
+          $scope.user_id = $cookies.get('user_id')
           window.location.assign('http://localhost:8080/#/users/' + $cookies.get('user_id'))
           console.log("$scope.user_id = " + $scope.user_id)
           console.log("$cookies.get(user_id) = " + $cookies.get('user_id'))
@@ -142,6 +142,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
 })
   .controller('articlesController', function ($scope, $http, logIn, $cookies) {
     $scope.login = $cookies.get('login')
+    console.log("$cookies.get(user_id) = " + $cookies.get('user_id'))
     console.log('in articles controller')
     console.log('login = ' + $cookies.get('login'))
     $http.get('/articles')
