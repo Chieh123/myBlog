@@ -23,6 +23,12 @@ app.get('/articles/:article_id', function (req, res) {
   let apiServiceObj = new ApiService(req, res)
   apiServiceObj.getArticle()
 })
+//search articles
+app.post('/articles/search',function(req,res) {
+  let apiServiceObj = new ApiService(req, res)
+  console.log('come in the search request')
+  apiServiceObj.searchArticles()
+})
 // create an article
 app.post('/postArticle/:user_id', function (req, res) {
   let apiServiceObj = new ApiService(req, res)

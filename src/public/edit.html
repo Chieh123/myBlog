@@ -9,7 +9,7 @@
       <div class="form-group">
         <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
         article title: <input name = "article_title" type = 'text' class="form-control input-lg text-center" ng-model="formData.title" ng-init = "formData.title ='{{article.Title}}'" ng-required = "true"></input>
-        content: <textarea name = "article_content" class="form-control input-lg" ng-model="formData.content" ng-init = "formData.content ='{{article.Content}}'" ng-required = "true"></textarea>
+        content: <textarea placeholder="please type your content" name = "article_content" class="form-control input-lg" ng-model="formData.content" ng-init = "formData.content ='{{article.Content}}'" ng-required = "true"></textarea>
       </div>
         <!-- createToDo() WILL CREATE NEW TODOS -->
         <button ng-if="editForm.article_title.$valid && editForm.article_content.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="editArticle()">Confirm</button>

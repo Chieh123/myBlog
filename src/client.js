@@ -30,6 +30,21 @@ app.get('/articles/:article_id', function (req, res) {
     res.send(body)
   })
 })
+//searchArticles
+app.post('/searchArticles', function(req, res) {
+  console.log('app.put search')
+  console.log('req.body.title = ' + req.body.title)
+  console.log("req.body = " + req.body)
+
+  request.post({url: serverurl + '/articles/search'+ '?title=' + encodeURI(req.body.title) + '&author=' + encodeURI(req.body.author) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
+    if (error) {
+      return console.error('upload failed:', error)
+    }
+    console.log("body = " + body)
+    res.send(body)
+  })
+
+})
 // create Todo and send back all todos after creation
 app.post('/postArticle/:user_id', function (req, res) {
   request.post({url: serverurl + '/postArticle/' + req.params.user_id + '?title=' + encodeURI(req.body.title) + '&author=' + encodeURI(req.body.author) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {

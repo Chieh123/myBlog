@@ -11,6 +11,7 @@ class apiService {
   }
   // print the article list
   getArticles () {
+    console.log('in get articles server_api')
     let self = this
     Article.find(function (err, articles) {
       if (err) {
@@ -31,7 +32,26 @@ class apiService {
       self.res.send(article)
     })
   };
-  // todo
+  //search articles
+  searchArticles () {
+    let self = this
+    console.log("decodeURI(self.req.query.title) = " + decodeURI(self.req.query.title))
+    console.log("decodeURI(self.req.query.content) = " + decodeURI(self.req.query.content))
+    console.log("decodeURI(self.req.query.author) = " + decodeURI(self.req.query.author))
+    Article.find({
+      Title: { $regex: '.*' + decodeURI(self.req.query.title) + '.*' },
+      Author: { $regex: '.*' + decodeURI(self.req.query.author) + '.*' },
+      Content: { $regex: '.*' + decodeURI(self.req.query.content) + '.*'}
+    }, function (err, articles) {
+      if (err) {
+        sonsole.log('error occure')
+        self.res.send(err)
+      }
+      console.log("in api articles = " + articles)
+      self.res.send(articles)
+    })
+  };
+  // post article
   postArticle () {
     let self = this
     console.log('self.req.query.title = ' + decodeURI(self.req.query.title))

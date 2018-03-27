@@ -14,7 +14,10 @@
         </tr>
         <tr>
           <th>password</th>
-          <td>{{ user.Password }}</td>
+          <td>
+            <p ng-show = "!pwd">{{ user.Password }}</p>
+            <p ng-click="showpwd()">click to show/hide password</p>
+          </td>
         </tr>
       </thead>
     </table>

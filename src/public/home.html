@@ -4,6 +4,30 @@
   <a href="#/postArticle"><button>post article</button></a>
   <a ng-if = "login == 'true'" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
 </div>
+
+<form name="targetForm">
+  <label>Title:
+    <input type="checkbox" ng-model="checkboxModel.title">
+  </label>
+  <label>Author:
+    <input type="checkbox" ng-model="checkboxModel.author">
+  </label>
+  <label>Content:
+    <input type="checkbox" ng-model="checkboxModel.content">
+  </label>
+ </form>
+ <div id="search-form" class="row">
+   <div class="col-sm-8 col-sm-offset-2 text-center">
+     <form name="searchForm" novalidate>
+       <div class="form-group" ng-if = "checkboxModel.title || checkboxModel.author || checkboxModel.content">
+         <input ng-show = "checkboxModel.title" id = "article_title" type = 'text' class="form-control input-lg text-center" ng-model="formData.title"  ng-required = "true" placeholder="please type title"></input>
+         <input ng-show = "checkboxModel.author" id = "article_author" type = 'text' class="form-control input-lg text-center" ng-model="formData.author"  ng-required = "true" placeholder="please type author name"></input>
+         <input ng-show = "checkboxModel.content" type = 'text' id = "article_content" class="form-control input-lg" ng-model="formData.content" placeholder="please type the content"></input>
+         <button type="submit" class="btn btn-primary btn-lg" ng-click="searchArticles()">search</button>
+       </div>
+     </form>
+   </div>
+ </div>
 <!--list of artucles-->
 <div>
   <table>
