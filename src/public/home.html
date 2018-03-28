@@ -2,6 +2,7 @@
   <a href="#/signIn" ng-if = "login == 'false'"><button>sign in</button></a>
   <a href="#/signUp" ng-if = "login == 'false'"><button>sign up</button></a>
   <a href="#/postArticle"><button>post article</button></a>
+  <a ng-if = "login == 'true'" href="#/users/{{user_id}}"><button align="right">home</button></a>
   <a ng-if = "login == 'true'" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
 </div>
 

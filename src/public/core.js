@@ -14,7 +14,7 @@ myBlogArticles.config(function ($routeProvider) {
     })
     .when('/searchArticles', {
       templateUrl: 'home.html',
-      controller: 'mainController'
+      controller: 'searchArticles'
     })
     .when('/postArticle', {
       templateUrl: 'post.html',
@@ -41,50 +41,64 @@ myBlogArticles.config(function ($routeProvider) {
       controller: 'articlesController'
     })
 })
-myBlogArticles.service('logIn', function ($cookies) {
-  this.login = $cookies.get('login')
-  this.user_id = $cookies.get('user_id')
-})
-myBlogArticles.controller('mainController', function ($scope, $http, $routeParams, logIn,$cookies) {
+myBlogArticles.controller('mainController', function ($scope, $http, $routeParams, $cookies) {
   $scope.formData = {}
+  console.log("$cookies.get('login') = " + $cookies.get('login') )
+  if($cookies.get('login') == null) {
+    console.log("login is null")
+    $cookies.put('login', false)
+  }
   $scope.login = $cookies.get('login')
+  $scope.user_id = $cookies.get('user_id')
+  $scope.NoBadWord = true
   $scope.checkboxModel = {
-       title : false,
-       author : false,
-       content : false
-  };
+    title: false,
+    author: false,
+    content: false
+  }
+  $scope.target = {
+    title: $cookies.get('title'),
+    author: $cookies.get('author'),
+    content: $cookies.get('content')
+  }
   // when submitting the add form, send the text to the node API
   $scope.postArticle = function () {
-    var title = document.getElementById("post_title").value;
-    var author = document.getElementById("post_author").value;
-    var content = document.getElementById("post_content").value;
+    var title = document.getElementById('post_title').value
+    var author = document.getElementById('post_author').value
+    var content = document.getElementById('post_content').value
     $scope.formData.title = title
     $scope.formData.author = author
     $scope.formData.content = content
-    console.log("$cookies.get(user_id) = " + $cookies.get('user_id'))
-    $http.post('/postArticle/' + $cookies.get('user_id'), $scope.formData)
-      .success(function (data) {
-        $scope.formData = {}
-        $scope.articles = data
-        console.log(data)
-        window.location.assign('http://localhost:8080/#/articles')
-      })
-      .error(function (data) {
-        console.log('Error: ' + data)
-      })
+    $scope.NoBadWord = NoBadWord($scope)
+    if($scope.NoBadWord) {
+      console.log('$cookies.get(user_id) = ' + $cookies.get('user_id'))
+      $http.post('/postArticle/' + $cookies.get('user_id'), $scope.formData)
+        .success(function (data) {
+          $scope.formData = {}
+          $scope.articles = data
+          console.log(data)
+          window.location.assign('http://localhost:8080/#/articles')
+        })
+        .error(function (data) {
+          console.log('Error: ' + data)
+        })
+    }
   }
   $scope.editArticle = function () {
-    $http.put('/articles/' + $routeParams.id + '/edit?user_id=' + $cookies.get('user_id'), $scope.formData)
-      .success(function (data) {
-        $scope.formData = {}
-        $scope.articles = data
-        console.log('edit' + data)
-        console.log($routeParams.id)
-        window.location.assign('http://localhost:8080/#/articles/' + $routeParams.id)
-      })
-      .error(function (data) {
-        console.log('Error: ' + data)
-      })
+    $scope.NoBadWord = NoBadWord($scope)
+    if($scope.NoBadWord) {
+      $http.put('/articles/' + $routeParams.id + '/edit?user_id=' + $cookies.get('user_id'), $scope.formData)
+        .success(function (data) {
+          $scope.formData = {}
+          $scope.articles = data
+          console.log('edit' + data)
+          console.log($routeParams.id)
+          window.location.assign('http://localhost:8080/#/articles/' + $routeParams.id)
+        })
+        .error(function (data) {
+          console.log('Error: ' + data)
+        })
+      }
   }
 
   $scope.deleteArticle = function (id) {
@@ -99,15 +113,11 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
       })
   }
 
-  $scope.searchArticles = function() {
-    var title = document.getElementById("article_title").value;
-    var author = document.getElementById("article_author").value;
-    var content = document.getElementById("article_content").value;
-    $scope.formData.title = title
-    $scope.formData.author = author
-    $scope.formData.content = content
-    console.log("$scope.formData.title = " + $scope.formData.title)
-    $http.post('/searchArticles',$scope.formData)
+  $scope.searchArticles = function () {
+    $cookies.put('title', document.getElementById('article_title').value)
+    $cookies.put('author', document.getElementById('article_author').value)
+    $cookies.put('content', document.getElementById('article_author').value)
+    $http.post('/searchArticles', $scope.formData)
       .success(function (data) {
         $scope.articles = data
         console.log(data)
@@ -124,11 +134,11 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         $scope.formData = {}
         console.log('data.length = ' + data.length)
         if (data.length === 1) {
-          $cookies.put('login', true);
+          $cookies.put('login', true)
           console.log('logIn.login = ' + $cookies.get('login'))
-          $cookies.put('user_id', data[0]._id);
+          $cookies.put('user_id', data[0]._id)
           window.location.assign('http://localhost:8080/#/users/' + $cookies.get('user_id'))
-          console.log("$cookies.get(user_id) = " + $cookies.get('user_id'))
+          console.log('$cookies.get(user_id) = ' + $cookies.get('user_id'))
         }
         console.log(data)
       })
@@ -136,7 +146,6 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         console.log('Error: ' + data)
       })
   }
-
   $scope.signUp = function () {
     $http.post('/signUp', $scope.formData)
       .success(function (data) {
@@ -144,9 +153,9 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         $scope.formData = {}
         console.log('data.length' + data.length)
         if (data.length === 1) {
-          $cookies.put('user_id', data[0]._id);
+          $cookies.put('user_id', data[0]._id)
           window.location.assign('http://localhost:8080/#/users/' + $cookies.get('user_id'))
-          $cookies.put('login', true);
+          $cookies.put('login', true)
         } else {
           console.log('the account name is not unique')
         }
@@ -157,39 +166,43 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
       })
   }
   $scope.logOut = function () {
-    $cookies.put('login', false);
-    $cookies.put('user_id', 0);
-    $cookies.get('login');
+    $cookies.put('login', false)
+    $cookies.put('user_id', 0)
+    $cookies.get('login')
     console.log('when logout login = ' + $cookies.get('login'))
     console.log('$scope.login = ' + $scope.login)
     window.location.assign('http://localhost:8080')
   }
 })
-  .controller('articlesController', function ($scope, $http, logIn, $cookies) {
+  .controller('articlesController', function ($scope, $http, $cookies) {
     $scope.login = $cookies.get('login')
-    console.log("$cookies.get(user_id) = " + $cookies.get('user_id'))
+    console.log('$cookies.get(user_id) = ' + $cookies.get('user_id'))
     console.log('in articles controller')
     console.log('login = ' + $cookies.get('login'))
+    $scope.user_id = $cookies.get('user_id')
     $http.get('/articles')
       .success(function (data) {
         $scope.articles = data
+        for(i = 0; i < $scope.articles.length; i++){
+          $scope.articles[i].pDate = new Date($scope.articles[i].pDate).toLocaleString()
+        }
         $scope.formData = {}
         console.log(data)
       })
       .error(function (data) {
         console.log('Error: ' + data)
       })
-      $scope.$watch($scope.articles, function(newValue, oldValue) {
-        console.log(newValue, oldValue);
-
-      },true);
   })
-  .controller('detailController', function ($scope, $http, $routeParams, logIn, $cookies) {
+  .controller('detailController', function ($scope, $http, $routeParams, $cookies) {
     $scope.login = $cookies.get('login')
     console.log('$routeParams.id = ' + $routeParams.id)
+    $scope.user_id = $cookies.get('$routeParams.id')
     $http.get('/articles/' + $routeParams.id, $scope.formData)
       .success(function (data) {
         $scope.article = data[0]
+        console.log("$scope.article.mDate.toLocaleString()" + $scope.article.mDate.toLocaleString())
+        $scope.article.mDate = new Date($scope.article.mDate).toLocaleString()
+        $scope.article.pDate = new Date($scope.article.pDate).toLocaleString()
         $scope.formData = {}
         console.log(data)
       })
@@ -197,9 +210,10 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         console.log('Error: ' + data)
       })
   })
-  .controller('editController', function ($scope, $http, $routeParams, logIn, $cookies ) {
+  .controller('editController', function ($scope, $http, $routeParams, $cookies) {
     $scope.login = $cookies.get('login')
     console.log('$routeParams.id = ' + $routeParams.id)
+    $scope.user_id = $cookies.get('user_id')
     $http.get('/articles/' + $routeParams.id, $scope.formData)
       .success(function (data) {
         $scope.article = data[0]
@@ -211,51 +225,91 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         console.log('Error: ' + data)
       })
   })
-  .controller('accountController', function ($scope, $http, $routeParams, logIn, $cookies) {
+  .controller('accountController', function ($scope, $http, $routeParams, $cookies) {
     $scope.login = $cookies.get('login')
+    $scope.user_id = $cookies.get('user_id')
     console.log('$cookies.get(login) = ' + typeof $cookies.get('login'))
     console.log('$scope.login = ' + typeof $scope.login)
     $scope.count = 0
     $scope.pwd = false
-    $scope.showpwd = function(){
-      if($scope.count % 2 === 1) {
+    $scope.showpwd = function () {
+      if ($scope.count % 2 === 1) {
         $scope.pwd = true
       } else {
         $scope.pwd = false
       }
-      console.log("pwd = " + $scope.pwd)
+      console.log('pwd = ' + $scope.pwd)
       $scope.count = $scope.count + 1
     }
-    console.log("pwd = " + $scope.pwd)
+    console.log('pwd = ' + $scope.pwd)
     $http.get('/users/' + $routeParams.id)
       .success(function (data) {
         $scope.user = data[0]
-        $scope.pwd = "click to show password"
+        $scope.pwd = 'click to show password'
         console.log(data)
       })
       .error(function (data) {
         console.log('Error: ' + data)
       })
   })
-
-myBlogArticles.directive('checkContent', function() {
-    return {
-        //restrict可以定義directive是A(屬性)或E(元素)或C(類別)或M(備註)，此範例是定義為屬性
-        restrict: 'A',
-        //link是這個directive 一被執行就做的事情
-        //scope和$scope一樣，element 就是你這個 directive 標籤本身物件，attr 就是 標籤內的 屬性
-        link: function(scope, element, attr){
-            //用$watch去即時監看ngShow2
-            scope.$watch(attr.checkContent, function(value){
-               //element.css('background-color', value ? '' : 'yellow');
-                if(value){
-                    //addClass之後，如果沒有remove掉，再加別的class、它會蓋上去
-                    element.removeClass( 'click_style');
-                }
-                else{
-                    element.addClass( 'click_style');
-                }
-            });
+  .controller('searchArticles', function ($scope, $http, $cookies) {
+      if($scope.formData.title == null) {
+        $scope.formData.title = $cookies.get('title')
+      }
+      if($scope.formData.author == null) {
+        $scope.formData.author = $cookies.get('author')
+      }
+      if($scope.formData.content == null) {
+        $scope.formData.content = $cookies.get('content')
+      }
+      $scope.formData.title = $scope.target.title
+      $scope.formData.author = $scope.target.author
+      $scope.formData.content = $scope.target.content
+      console.log('$scope.formData.title = ' + $scope.formData.title)
+      $http.post('/searchArticles', $scope.formData)
+        .success(function (data) {
+          $scope.articles = data
+          console.log(data)
+          window.location.assign('http://localhost:8080/#/searchArticles')
+        })
+        .error(function (data) {
+          console.log('Error: ' + data)
+        })
+    })
+function NoBadWord($scope) {
+  var badWord = [ " 幹你娘 "," 操機歪 "," 你娘被狗幹 "," 你爸幹死狗 "," 你母啊大懶趴 "," 你爸操機歪 "," 水雞 ㄇㄞ "," 哭爸 "," 哭母 "," 哭腰 "," 哭餐 "," 狗母養的 "," 破麻 "," 看三小 "," 你娘卡好 "," 婊仔子 "," 幹 "," 操你媽的 "," you idiot "," what are you fxxk doing "," you are a jerk "," bullshit "," bitch "," you bastard " ]
+  var s = $scope.formData.content
+  s = " " + s + " "
+  s = s.toLowerCase()
+  var symbol = ['\`','~','!','@','#','$','%','(',')','-','_','^','&','*','+','=','\\','[',']','|','\"','\'','\,','[',']','{','}',':',';','?','/','.',',','>','<','！','？','（','）','『','』','「','」','“','：','；','/','，','《','、','〈','。','⋯','・','》','〉']
+  for(i = 0; i < symbol.length; i++){
+    s = s.replace(symbol[i],' ')
+  }
+  console.log("s = ", s)
+  for(i = 0; i < badWord.length; i++) {
+    if(s.indexOf(badWord[i]) != -1) {
+      return false
+    }
+  }
+  return true
+}
+myBlogArticles.directive('checkContent', function () {
+  return {
+    // restrict可以定義directive是A(屬性)或E(元素)或C(類別)或M(備註)，此範例是定義為屬性
+    restrict: 'A',
+    // link是這個directive 一被執行就做的事情
+    // scope和$scope一樣，element 就是你這個 directive 標籤本身物件，attr 就是 標籤內的 屬性
+    link: function (scope, element, attr) {
+      // 用$watch去即時監看ngShow2
+      scope.$watch(attr.checkContent, function (value) {
+        // element.css('background-color', value ? '' : 'yellow');
+        if (value) {
+          // addClass之後，如果沒有remove掉，再加別的class、它會蓋上去
+          element.removeClass('click_style')
+        } else {
+          element.addClass('click_style')
         }
-    };
-});
+      })
+    }
+  }
+})

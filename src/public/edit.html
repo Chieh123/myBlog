@@ -1,6 +1,7 @@
 <div>
   <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
   <a ng-if = "login == 'true'" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
+  <a ng-if = "login == 'true'" href="#/users/{{user_id}}"><button align="right">home</button></a>
 </div>
 <!--edit artucle-->
 <div id="edit-article-form" class="row">
@@ -12,7 +13,9 @@
         content: <textarea placeholder="please type your content" name = "article_content" class="form-control input-lg" ng-model="formData.content" ng-init = "formData.content ='{{article.Content}}'" ng-required = "true"></textarea>
       </div>
         <!-- createToDo() WILL CREATE NEW TODOS -->
+        <p ng-if="!postForm.article_title.$valid || !postForm.article_author.$valid || editForm.article_content.$valid"> Your title, author name, or content is empty or only contain spaces.</p>
         <button ng-if="editForm.article_title.$valid && editForm.article_content.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="editArticle()">Confirm</button>
+        <p ng-if="!NoBadWord">Some bad words appear; you need to change it.</p>
     </form>
   </div>
 </div>

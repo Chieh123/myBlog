@@ -32,22 +32,20 @@ class apiService {
       self.res.send(article)
     })
   };
-  //search articles
+  // search articles
   searchArticles () {
     let self = this
-    console.log("decodeURI(self.req.query.title) = " + decodeURI(self.req.query.title))
-    console.log("decodeURI(self.req.query.content) = " + decodeURI(self.req.query.content))
-    console.log("decodeURI(self.req.query.author) = " + decodeURI(self.req.query.author))
+    console.log('decodeURI(self.req.query.title) = ' + decodeURI(self.req.query.title))
+    console.log('decodeURI(self.req.query.content) = ' + decodeURI(self.req.query.content))
+    console.log('decodeURI(self.req.query.author) = ' + decodeURI(self.req.query.author))
     Article.find({
       Title: { $regex: '.*' + decodeURI(self.req.query.title) + '.*' },
       Author: { $regex: '.*' + decodeURI(self.req.query.author) + '.*' },
       Content: { $regex: '.*' + decodeURI(self.req.query.content) + '.*'}
     }, function (err, articles) {
       if (err) {
-        sonsole.log('error occure')
         self.res.send(err)
       }
-      console.log("in api articles = " + articles)
       self.res.send(articles)
     })
   };
@@ -135,7 +133,6 @@ class apiService {
       Account: self.req.query.userName
     }, function (err, c) {
       if (err) {
-        callback(err)
         self.res.send(err)
       }
       console.log('type of c = ' + typeof c)

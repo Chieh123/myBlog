@@ -2,9 +2,8 @@
   <a href="#/articles" ng-click="getArticles()"><button>article list</button></a>
   <a href="#/signIn" ng-if = "login == 'false'"><button>sign in</button></a>
   <a href="#/signUp" ng-if = "login == 'false'"><button>sign up</button></a>
+  <a ng-if = "login == 'true'" href="#/users/{{user_id}}"><button align="right">home</button></a>
   <a ng-if = "login == 'true'" href="#/logOut" ng-click="logOut()"><button align="right">log out</button></a>
-  {{login}}
-  {{user_id}}
 </div>
 <!-- FORM TO CREATE article -->
 <div id="article-form" class="row">
@@ -16,7 +15,9 @@
         author: <input id = "post_author" name = "article_author" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your name' ng-model="formData.author"  ng-required = "true"></input>
         content: <textarea id = "post_content" class="form-control input-lg" placeholder = 'please type ypur article' ng-model="formData.content" ></textarea>
         <!-- createToDo() WILL CREATE NEW TODOS -->
+        <p ng-if="!postForm.article_title.$valid || !postForm.article_author.$valid"> Your title or author name is empty or only contain spaces.</p>
         <button ng-if="postForm.article_title.$valid && postForm.article_author.$valid" type="submit" class="btn btn-primary btn-lg" ng-click="postArticle()">Submit</button>
+        <p ng-if="!NoBadWord">Some bad words appear; you need to change it.</p>
       </div>
     </form>
   </div>
