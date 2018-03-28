@@ -43,6 +43,7 @@ myBlogArticles.config(function ($routeProvider) {
 })
 myBlogArticles.controller('mainController', function ($scope, $http, $routeParams, $cookies) {
   $scope.formData = {}
+  $scope.articles = {}
   console.log("$cookies.get('login') = " + $cookies.get('login') )
   if($cookies.get('login') == null) {
     console.log("login is null")
@@ -117,15 +118,17 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
     $cookies.put('title', document.getElementById('article_title').value)
     $cookies.put('author', document.getElementById('article_author').value)
     $cookies.put('content', document.getElementById('article_author').value)
-    $http.post('/searchArticles', $scope.formData)
-      .success(function (data) {
-        $scope.articles = data
-        console.log(data)
-        window.location.assign('http://localhost:8080/#/searchArticles')
-      })
-      .error(function (data) {
-        console.log('Error: ' + data)
-      })
+    var locHref = location.href
+    console.log("this.locHerf = ", location.href)
+    console.log("tString(locHref).indexOf(search) = ", String(locHref).indexOf("search"))
+    if(String(locHref).indexOf("search") == -1) {
+      console.log("direct to search")
+      window.location.assign('http://localhost:8080/#/searchArticles')
+    } else {
+      console.log("reload search")
+      location.reload()
+    }
+
   }
   $scope.signIn = function () {
     console.log('$scope.formData.user_name = ' + $scope.formData.user_name)
@@ -253,24 +256,34 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
       })
   })
   .controller('searchArticles', function ($scope, $http, $cookies) {
-      if($scope.formData.title == null) {
+      if($cookies.get('title') == '') {
+        console.log('$cookies.get(title) = null ')
+        $scope.formData.title = ''
+      } else {
+        console.log('$cookies.get(title) != null ')
         $scope.formData.title = $cookies.get('title')
       }
-      if($scope.formData.author == null) {
-        $scope.formData.author = $cookies.get('author')
+      console.log('$cookies.get(author) = ',$cookies.get('author'))
+      if($cookies.get('author')  == '') {
+        console.log('$cookies.get(author) = null' )
+        $scope.formData.author = ''
+      } else {
+        $scope.formData.author = $cookies.get('title')
       }
-      if($scope.formData.content == null) {
+      if($cookies.get('content')  == '') {
+        console.log('$cookies.get(content) = null ')
+        $scope.formData.content = ''
+      } else {
         $scope.formData.content = $cookies.get('content')
       }
-      $scope.formData.title = $scope.target.title
-      $scope.formData.author = $scope.target.author
-      $scope.formData.content = $scope.target.content
-      console.log('$scope.formData.title = ' + $scope.formData.title)
       $http.post('/searchArticles', $scope.formData)
         .success(function (data) {
           $scope.articles = data
+          $scope.formData = {}
+          $cookies.put('title', '')
+          $cookies.put('author','')
+          $cookies.put('content', '')
           console.log(data)
-          window.location.assign('http://localhost:8080/#/searchArticles')
         })
         .error(function (data) {
           console.log('Error: ' + data)
