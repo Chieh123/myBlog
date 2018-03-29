@@ -36,12 +36,13 @@ class apiService {
   searchArticles () {
     let self = this
     console.log('decodeURI(self.req.query.title) = ' + decodeURI(self.req.query.title))
-    console.log('decodeURI(self.req.query.content) = ' + decodeURI(self.req.query.content))
+    console.log('??decodeURI(self.req.query.content) = ' + decodeURI(self.req.query.content))
     console.log('decodeURI(self.req.query.author) = ' + decodeURI(self.req.query.author))
     Article.find({
       Title: { $regex: '.*' + decodeURI(self.req.query.title) + '.*' },
       Author: { $regex: '.*' + decodeURI(self.req.query.author) + '.*' },
-      Content: { $regex: '.*' + decodeURI(self.req.query.content) + '.*'}
+      Content: { $regex: '.*' + decodeURI(self.req.query.content) + '.*'},
+      user_id: { $regex: '.*' + self.req.query.user_id + '.*'}
     }, function (err, articles) {
       if (err) {
         self.res.send(err)

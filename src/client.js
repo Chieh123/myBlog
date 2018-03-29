@@ -36,7 +36,7 @@ app.post('/searchArticles', function (req, res) {
   console.log('req.body.title = ' + req.body.title)
   console.log('req.body = ' + req.body)
 
-  request.post({url: serverurl + '/articles/search' + '?title=' + encodeURI(req.body.title) + '&author=' + encodeURI(req.body.author) + '&content=' + encodeURI(req.body.content)}, function (error, httpResponse, body) {
+  request.post({url: serverurl + '/articles/search' + '?title=' + encodeURI(req.body.title) + '&author=' + encodeURI(req.body.author) + '&content=' + encodeURI(req.body.content) + '&user_id=' + req.body.user_id}, function (error, httpResponse, body) {
     if (error) {
       return console.error('upload failed:', error)
     }
@@ -97,6 +97,9 @@ app.post('/signIn', function (req, res) {
     console.log('client log in')
     res.send(body)
   })
+})
+app.post('/signInWithFB', function (req, res) {
+  console.log('in client sign in with FB')
 })
 app.get('/usernameAvailable/:user_name', function (req, res) {
   console.log('req.params.user_name = ' + req.params.user_name)

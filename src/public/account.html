@@ -5,6 +5,7 @@
 </div>
 <!-- account information -->
 <div class="container">
+  <p> account information</p>
   <div class="jumbotron text-center">
     <table>
       <thead>
@@ -22,4 +23,26 @@
       </thead>
     </table>
   </div>
+</div>
+
+<div>
+  <p> your article list</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>post date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="article in articles | orderBy : 'mDate' track by article._id">
+        <form>
+          <td><a href="#/articles/{{article._id}}">{{ article.Title }}</a></td>
+          <td>{{ article.Author }}</td>
+          <td ng-repeat-end>{{article.pDate}}</td>
+        </form>
+      </tr>
+    </tbody>
+  </table>
 </div>

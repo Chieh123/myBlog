@@ -73,7 +73,7 @@ textarea {
     resize: none;
 }
 a:link, a:visited {
-    background-color: #cfd8dc;
+    background-color: #eee;
     color: black;
     padding: 14px 25px;
     text-align: center;
@@ -81,7 +81,7 @@ a:link, a:visited {
     display: inline-block;
 }
 a:hover, a:active {
-    background-color: gray;
+    background-color: #eee;
     color: white;
 }
 

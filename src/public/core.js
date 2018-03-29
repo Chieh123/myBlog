@@ -117,7 +117,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
   $scope.searchArticles = function () {
     $cookies.put('title', document.getElementById('article_title').value)
     $cookies.put('author', document.getElementById('article_author').value)
-    $cookies.put('content', document.getElementById('article_author').value)
+    $cookies.put('content', document.getElementById('article_content').value)
     var locHref = location.href
     console.log("this.locHerf = ", location.href)
     console.log("tString(locHref).indexOf(search) = ", String(locHref).indexOf("search"))
@@ -178,6 +178,11 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
   }
 })
   .controller('articlesController', function ($scope, $http, $cookies) {
+    var locHref = location.href
+    if(String(locHref).indexOf("search") == -1) {
+      console.log("direct to search")
+      $scope.search = false
+    }
     $scope.login = $cookies.get('login')
     console.log('$cookies.get(user_id) = ' + $cookies.get('user_id'))
     console.log('in articles controller')
@@ -254,29 +259,48 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
       .error(function (data) {
         console.log('Error: ' + data)
       })
+    $scope.formData.title = ''
+    $scope.formData.author = ''
+    $scope.formData.content = ''
+    $scope.formData.user_id = $cookies.get('user_id')
+    $http.post('/searchArticles', $scope.formData)
+      .success(function (data) {
+        $scope.articles = data
+        $scope.formData = {}
+        console.log(data)
+      })
+      .error(function (data) {
+        console.log('Error: ' + data)
+      })
   })
   .controller('searchArticles', function ($scope, $http, $cookies) {
-      if($cookies.get('title') == '') {
-        console.log('$cookies.get(title) = null ')
-        $scope.formData.title = ''
-      } else {
-        console.log('$cookies.get(title) != null ')
-        $scope.formData.title = $cookies.get('title')
-      }
-      console.log('$cookies.get(author) = ',$cookies.get('author'))
-      if($cookies.get('author')  == '') {
-        console.log('$cookies.get(author) = null' )
-        $scope.formData.author = ''
-      } else {
-        $scope.formData.author = $cookies.get('title')
-      }
-      if($cookies.get('content')  == '') {
-        console.log('$cookies.get(content) = null ')
-        $scope.formData.content = ''
-      } else {
-        $scope.formData.content = $cookies.get('content')
-      }
-      $http.post('/searchArticles', $scope.formData)
+    var locHref = location.href
+    if(String(locHref).indexOf("search") != -1) {
+      console.log("direct to search")
+      $scope.search = true
+    }
+    if($cookies.get('title') == '') {
+      console.log('$cookies.get(title) = null ')
+      $scope.formData.title = ''
+    } else {
+      console.log('$cookies.get(title) != null ')
+      $scope.formData.title = $cookies.get('title')
+    }
+    console.log('$cookies.get(author) = ',$cookies.get('author'))
+    if($cookies.get('author')  == '') {
+      console.log('$cookies.get(author) = null' )
+      $scope.formData.author = ''
+    } else {
+      $scope.formData.author = $cookies.get('author')
+    }
+    if($cookies.get('content')  == '') {
+      console.log('$cookies.get(content) = null ')
+      $scope.formData.content = ''
+    } else {
+      $scope.formData.content = $cookies.get('content')
+    }
+    $scope.formData.user_id = ''
+    $http.post('/searchArticles', $scope.formData)
         .success(function (data) {
           $scope.articles = data
           $scope.formData = {}
@@ -288,7 +312,9 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         .error(function (data) {
           console.log('Error: ' + data)
         })
-    })
+  })
+
+
 function NoBadWord($scope) {
   var badWord = [ " 幹你娘 "," 操機歪 "," 你娘被狗幹 "," 你爸幹死狗 "," 你母啊大懶趴 "," 你爸操機歪 "," 水雞 ㄇㄞ "," 哭爸 "," 哭母 "," 哭腰 "," 哭餐 "," 狗母養的 "," 破麻 "," 看三小 "," 你娘卡好 "," 婊仔子 "," 幹 "," 操你媽的 "," you idiot "," what are you fxxk doing "," you are a jerk "," bullshit "," bitch "," you bastard " ]
   var s = $scope.formData.content
@@ -306,23 +332,3 @@ function NoBadWord($scope) {
   }
   return true
 }
-myBlogArticles.directive('checkContent', function () {
-  return {
-    // restrict可以定義directive是A(屬性)或E(元素)或C(類別)或M(備註)，此範例是定義為屬性
-    restrict: 'A',
-    // link是這個directive 一被執行就做的事情
-    // scope和$scope一樣，element 就是你這個 directive 標籤本身物件，attr 就是 標籤內的 屬性
-    link: function (scope, element, attr) {
-      // 用$watch去即時監看ngShow2
-      scope.$watch(attr.checkContent, function (value) {
-        // element.css('background-color', value ? '' : 'yellow');
-        if (value) {
-          // addClass之後，如果沒有remove掉，再加別的class、它會蓋上去
-          element.removeClass('click_style')
-        } else {
-          element.addClass('click_style')
-        }
-      })
-    }
-  }
-})
