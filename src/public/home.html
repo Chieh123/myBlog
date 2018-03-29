@@ -42,7 +42,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="article in articles | orderBy : 'mDate' track by article._id">
+      <tr ng-repeat="article in articles | orderBy : 'mDate'">
         <form>
           <td><a href="#/articles/{{article._id}}">{{ article.Title }}</a></td>
           <td>{{ article.Author }}</td>

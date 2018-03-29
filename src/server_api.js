@@ -41,8 +41,8 @@ class apiService {
     Article.find({
       Title: { $regex: '.*' + decodeURI(self.req.query.title) + '.*' },
       Author: { $regex: '.*' + decodeURI(self.req.query.author) + '.*' },
-      Content: { $regex: '.*' + decodeURI(self.req.query.content) + '.*'},
-      user_id: { $regex: '.*' + self.req.query.user_id + '.*'}
+      Content: { $regex: '.*' + decodeURI(self.req.query.content) + '.*' },
+      user_id: { $regex: '.*' + self.req.query.user_id + '.*' }
     }, function (err, articles) {
       if (err) {
         self.res.send(err)
@@ -206,9 +206,5 @@ var User = mongoose.model('users', {
   Password: {type: String, default: ' '},
   myDate: {type: Date, default: Date.now}
 })
-var Command = mongoose.model('commands', {
-  User_id: {type: String, default: ' '},
-  Article_id: {type: String, default: ' '},
-  GivenDate: {type: Date, default: Date.now}
-})
+
 module.exports = apiService

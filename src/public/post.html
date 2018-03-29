@@ -12,7 +12,9 @@
       <div class="form-group">
         <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
         title: <input id = "post_title" name = "article_title" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your title' ng-model="formData.title"  ng-required = "true"></input>
-        author: <input id = "post_author" name = "article_author" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your name' ng-model="formData.author"  ng-required = "true"></input>
+        author:<input type="checkbox" ng-click="anonymous()" name = "anonymous"></input>
+        <label for="anonymous">I want to be anonymous.</label>
+         <input id = "post_author" name = "article_author" type = 'text' class="form-control input-lg text-center" placeholder = 'please type your name' ng-model="formData.author"  ng-required = "true"></input>
         content: <textarea id = "post_content" class="form-control input-lg" placeholder = 'please type ypur article' ng-model="formData.content" ></textarea>
         <!-- createToDo() WILL CREATE NEW TODOS -->
         <p ng-if="!postForm.article_title.$valid || !postForm.article_author.$valid"> Your title or author name is empty or only contain spaces.</p>

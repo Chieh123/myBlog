@@ -44,9 +44,9 @@ myBlogArticles.config(function ($routeProvider) {
 myBlogArticles.controller('mainController', function ($scope, $http, $routeParams, $cookies) {
   $scope.formData = {}
   $scope.articles = {}
-  console.log("$cookies.get('login') = " + $cookies.get('login') )
-  if($cookies.get('login') == null) {
-    console.log("login is null")
+  console.log("$cookies.get('login') = " + $cookies.get('login'))
+  if ($cookies.get('login') == null) {
+    console.log('login is null')
     $cookies.put('login', false)
   }
   $scope.login = $cookies.get('login')
@@ -55,7 +55,8 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
   $scope.checkboxModel = {
     title: false,
     author: false,
-    content: false
+    content: false,
+    anonymous: false
   }
   $scope.target = {
     title: $cookies.get('title'),
@@ -71,7 +72,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
     $scope.formData.author = author
     $scope.formData.content = content
     $scope.NoBadWord = NoBadWord($scope)
-    if($scope.NoBadWord) {
+    if ($scope.NoBadWord) {
       console.log('$cookies.get(user_id) = ' + $cookies.get('user_id'))
       $http.post('/postArticle/' + $cookies.get('user_id'), $scope.formData)
         .success(function (data) {
@@ -85,9 +86,23 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         })
     }
   }
+  var count = 0
+  $scope.anonymous = function () {
+    console.log('count before = ', count)
+    if (count === 0) {
+      $scope.formData.author = 'Anonymous'
+      $scope.checkboxModel.anonymous = true
+      count = (count + 1) % 2
+    } else {
+      $scope.formData.author = ''
+      $scope.checkboxModel.anonymous = false
+      count = (count + 1) % 2
+    }
+    console.log('count after = ', count)
+  }
   $scope.editArticle = function () {
     $scope.NoBadWord = NoBadWord($scope)
-    if($scope.NoBadWord) {
+    if ($scope.NoBadWord) {
       $http.put('/articles/' + $routeParams.id + '/edit?user_id=' + $cookies.get('user_id'), $scope.formData)
         .success(function (data) {
           $scope.formData = {}
@@ -99,7 +114,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         .error(function (data) {
           console.log('Error: ' + data)
         })
-      }
+    }
   }
 
   $scope.deleteArticle = function (id) {
@@ -119,16 +134,15 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
     $cookies.put('author', document.getElementById('article_author').value)
     $cookies.put('content', document.getElementById('article_content').value)
     var locHref = location.href
-    console.log("this.locHerf = ", location.href)
-    console.log("tString(locHref).indexOf(search) = ", String(locHref).indexOf("search"))
-    if(String(locHref).indexOf("search") == -1) {
-      console.log("direct to search")
+    console.log('this.locHerf = ', location.href)
+    console.log('tString(locHref).indexOf(search) = ', String(locHref).indexOf('search'))
+    if (String(locHref).indexOf('search') === -1) {
+      console.log('direct to search')
       window.location.assign('http://localhost:8080/#/searchArticles')
     } else {
-      console.log("reload search")
+      console.log('reload search')
       location.reload()
     }
-
   }
   $scope.signIn = function () {
     console.log('$scope.formData.user_name = ' + $scope.formData.user_name)
@@ -179,8 +193,8 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
 })
   .controller('articlesController', function ($scope, $http, $cookies) {
     var locHref = location.href
-    if(String(locHref).indexOf("search") == -1) {
-      console.log("direct to search")
+    if (String(locHref).indexOf('search') === -1) {
+      console.log('direct to search')
       $scope.search = false
     }
     $scope.login = $cookies.get('login')
@@ -191,7 +205,8 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
     $http.get('/articles')
       .success(function (data) {
         $scope.articles = data
-        for(i = 0; i < $scope.articles.length; i++){
+        var i
+        for (i = 0; i < $scope.articles.length; i++) {
           $scope.articles[i].pDate = new Date($scope.articles[i].pDate).toLocaleString()
         }
         $scope.formData = {}
@@ -208,7 +223,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
     $http.get('/articles/' + $routeParams.id, $scope.formData)
       .success(function (data) {
         $scope.article = data[0]
-        console.log("$scope.article.mDate.toLocaleString()" + $scope.article.mDate.toLocaleString())
+        console.log('$scope.article.mDate.toLocaleString()' + $scope.article.mDate.toLocaleString())
         $scope.article.mDate = new Date($scope.article.mDate).toLocaleString()
         $scope.article.pDate = new Date($scope.article.pDate).toLocaleString()
         $scope.formData = {}
@@ -247,7 +262,7 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
         $scope.pwd = false
       }
       console.log('pwd = ' + $scope.pwd)
-      $scope.count = $scope.count + 1
+      $scope.count = ($scope.count + 1) % 2
     }
     console.log('pwd = ' + $scope.pwd)
     $http.get('/users/' + $routeParams.id)
@@ -275,25 +290,25 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
   })
   .controller('searchArticles', function ($scope, $http, $cookies) {
     var locHref = location.href
-    if(String(locHref).indexOf("search") != -1) {
-      console.log("direct to search")
+    if (String(locHref).indexOf('search') !== -1) {
+      console.log('direct to search')
       $scope.search = true
     }
-    if($cookies.get('title') == '') {
+    if ($cookies.get('title') === '') {
       console.log('$cookies.get(title) = null ')
       $scope.formData.title = ''
     } else {
       console.log('$cookies.get(title) != null ')
       $scope.formData.title = $cookies.get('title')
     }
-    console.log('$cookies.get(author) = ',$cookies.get('author'))
-    if($cookies.get('author')  == '') {
-      console.log('$cookies.get(author) = null' )
+    console.log('$cookies.get(author) = ', $cookies.get('author'))
+    if ($cookies.get('author') === '') {
+      console.log('$cookies.get(author) = null')
       $scope.formData.author = ''
     } else {
       $scope.formData.author = $cookies.get('author')
     }
-    if($cookies.get('content')  == '') {
+    if ($cookies.get('content') === '') {
       console.log('$cookies.get(content) = null ')
       $scope.formData.content = ''
     } else {
@@ -301,32 +316,32 @@ myBlogArticles.controller('mainController', function ($scope, $http, $routeParam
     }
     $scope.formData.user_id = ''
     $http.post('/searchArticles', $scope.formData)
-        .success(function (data) {
-          $scope.articles = data
-          $scope.formData = {}
-          $cookies.put('title', '')
-          $cookies.put('author','')
-          $cookies.put('content', '')
-          console.log(data)
-        })
-        .error(function (data) {
-          console.log('Error: ' + data)
-        })
+      .success(function (data) {
+        $scope.articles = data
+        $scope.formData = {}
+        $cookies.put('title', '')
+        $cookies.put('author', '')
+        $cookies.put('content', '')
+        console.log(data)
+      })
+      .error(function (data) {
+        console.log('Error: ' + data)
+      })
   })
 
-
-function NoBadWord($scope) {
-  var badWord = [ " 幹你娘 "," 操機歪 "," 你娘被狗幹 "," 你爸幹死狗 "," 你母啊大懶趴 "," 你爸操機歪 "," 水雞 ㄇㄞ "," 哭爸 "," 哭母 "," 哭腰 "," 哭餐 "," 狗母養的 "," 破麻 "," 看三小 "," 你娘卡好 "," 婊仔子 "," 幹 "," 操你媽的 "," you idiot "," what are you fxxk doing "," you are a jerk "," bullshit "," bitch "," you bastard " ]
+function NoBadWord ($scope) {
+  var badWord = [ ' 幹你娘 ', ' 操機歪 ', ' 你娘被狗幹 ', ' 你爸幹死狗 ', ' 你母啊大懶趴 ', ' 你爸操機歪 ', ' 水雞 ㄇㄞ ', ' 哭爸 ', ' 哭母 ', ' 哭腰 ', ' 哭餐 ', ' 狗母養的 ', ' 破麻 ', ' 看三小 ', ' 你娘卡好 ', ' 婊仔子 ', ' 幹 ', ' 操你媽的 ', ' you idiot ', ' what are you fxxk doing ', ' you are a jerk ', ' bullshit ', ' bitch ', ' you bastard ' ]
   var s = $scope.formData.content
-  s = " " + s + " "
+  s = ' ' + s + ' '
   s = s.toLowerCase()
-  var symbol = ['\`','~','!','@','#','$','%','(',')','-','_','^','&','*','+','=','\\','[',']','|','\"','\'','\,','[',']','{','}',':',';','?','/','.',',','>','<','！','？','（','）','『','』','「','」','“','：','；','/','，','《','、','〈','。','⋯','・','》','〉']
-  for(i = 0; i < symbol.length; i++){
-    s = s.replace(symbol[i],' ')
+  var i = 0
+  var symbol = ['\`', '~', '!', '@', '#', '$', '%', '(', ')', '-', '_', '^', '&', '*', '+', '=', '\\', '[', ']', '|', '\"', '\'', '\,', '[', ']', '{', '}', ':', ';', '?', '/', '.', ',', '>', '<', '！', '？', '（', '）', '『', '』', '「', '」', '“', '：', '；', '/', '，', '《', '、', '〈', '。', '⋯', '・', '》', '〉']
+  for (i = 0; i < symbol.length; i++) {
+    s = s.replace(symbol[i], ' ')
   }
-  console.log("s = ", s)
-  for(i = 0; i < badWord.length; i++) {
-    if(s.indexOf(badWord[i]) != -1) {
+  console.log('s = ', s)
+  for (i = 0; i < badWord.length; i++) {
+    if (s.indexOf(badWord[i]) !== -1) {
       return false
     }
   }
